@@ -85,7 +85,7 @@ var SampleApp = function() {
 			var connection = mysql.createConnection({
 			  host     : process.env.OPENSHIFT_MYSQL_DB_HOST,
 			  port     : process.env.OPENSHIFT_MYSQL_DB_PORT,
-			  database : 'sport'
+			  database : 'sport',
 			  user     : 'adminm9YzrXI',
 			  password : '3mfbsClKVgyw'
 			});
