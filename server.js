@@ -1,21 +1,11 @@
 #!/bin/env node
-//  OpenShift sample Node application
 var express = require('express');
 var fs      = require('fs');
 
-
-/**
- *  Define the sample application.
- */
 var SampleApp = function() {
 
     //  Scope.
     var self = this;
-
-
-    /*  ================================================================  */
-    /*  Helper functions.                                                 */
-    /*  ================================================================  */
 
     /**
      *  Set up server IP address and port # using env variables/defaults.
@@ -33,7 +23,6 @@ var SampleApp = function() {
         };
     };
 
-
     /**
      *  Populate the cache.
      */
@@ -46,13 +35,11 @@ var SampleApp = function() {
         self.zcache['index.html'] = fs.readFileSync('./index.html');
     };
 
-
     /**
      *  Retrieve entry (content) from cache.
      *  @param {string} key  Key identifying content to retrieve from cache.
      */
     self.cache_get = function(key) { return self.zcache[key]; };
-
 
     /**
      *  terminator === the termination handler
@@ -67,7 +54,6 @@ var SampleApp = function() {
         }
         console.log('%s: Node server stopped.', Date(Date.now()) );
     };
-
 
     /**
      *  Setup termination handlers (for exit and a list of signals).
@@ -84,7 +70,6 @@ var SampleApp = function() {
         });
     };
 
-
     /*  ================================================================  */
     /*  App server functions (main app logic here).                       */
     /*  ================================================================  */
@@ -94,6 +79,28 @@ var SampleApp = function() {
      */
     self.createRoutes = function() {
         self.routes = { };
+
+        self.routes['/testdb'] = function(req, res) {
+			var mysql      = require('mysql');
+			var connection = mysql.createConnection({
+			  host     : process.env.OPENSHIFT_MYSQL_DB_HOST,
+			  port     : process.env.OPENSHIFT_MYSQL_DB_PORT,
+			  database : 'sport'
+			  user     : 'adminm9YzrXI',
+			  password : '3mfbsClKVgyw'
+			});
+
+			connection.connect();
+
+			connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
+			  if (err) throw err;
+
+			  console.log('The solution is: ', rows[0].solution);
+			});
+
+			connection.end();
+            res.send("<html><body>" + rows[0] + "</body></html>");
+        };
 
         self.routes['/asciimo'] = function(req, res) {
             var link = "http://i.imgur.com/kmbjB.png";
@@ -105,7 +112,6 @@ var SampleApp = function() {
             res.send(self.cache_get('index.html') );
         };
     };
-
 
     /**
      *  Initialize the server (express) and create the routes and register
@@ -121,7 +127,6 @@ var SampleApp = function() {
         }
     };
 
-
     /**
      *  Initializes the sample application.
      */
@@ -133,7 +138,6 @@ var SampleApp = function() {
         // Create the express server and routes.
         self.initializeServer();
     };
-
 
     /**
      *  Start the server (starts up the sample application).
@@ -148,12 +152,9 @@ var SampleApp = function() {
 
 };   /*  Sample Application.  */
 
-
-
 /**
  *  main():  Main code.
  */
 var zapp = new SampleApp();
 zapp.initialize();
 zapp.start();
-
