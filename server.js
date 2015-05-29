@@ -99,7 +99,7 @@ var SampleApp = function() {
 			});
 
 			connection.end();
-            res.send("<html><body>" + rows[0] + "</body></html>");
+            res.send("<html><body>Out of scope</body></html>");
         };
 
         self.routes['/asciimo'] = function(req, res) {
