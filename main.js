@@ -1,13 +1,10 @@
-#!/bin/env node
 var express = require('express');
 var requireFu = require('require-fu');
-var mysqldb = require('./mysqldb');
+var mysqldb = require('./lib/mysqldb');
 
 var ctx = {};
 ctx.app = express();
 ctx.pool = mysqldb.createConnectionPool();
-
-// verify db connection
 ctx.pool.getConnection(function(err, conn) { if (err) throw err; });
 
 requireFu(__dirname + '/routes')(ctx);
