@@ -4,17 +4,8 @@ var mysqldb = require('./lib/mysqldb');
 
 var ctx = {};
 ctx.app = express();
-//ctx.pool = mysqldb.createConnectionPool();
-//ctx.pool.getConnection(function(err, conn) { if (err) throw err; });
 
 requireFu(__dirname + '/routes')(ctx);
-
-ctx.app.get('/posts', function (req, res) {
-	req.models.post.find({}, function(err, posts) {
-		if (err) throw err;
-		res.send(posts);
-	});
-});
 
 ctx.app.get('/', function (req, res) {
   res.send('Hello World!');
