@@ -27,28 +27,30 @@ module.exports = function(ctx) {
 			for (i = 0; i < data.statuses.length; i++) {
 				var tweet = data.statuses[i];
 				if (!filterTweet(tweet)) {
-					posts.push(tweet);
+					posts.push({
+						username: tweet.user.screen_name,
+						text:     tweet.text,
+						created_at: new Date(tweet.created_at).toISOString().slice(0, 19).replace('T', ' ')
+					});
 				}
 			}
-			
-			if (posts.length > 0) {
-				//logger.log('Store ' + posts.length + ' posts out of ' + data.statuses.length);
-				posts.reverse();
-				//db.insert('posts', posts, log);
-				res.send(posts);
+
+			posts.reverse();
+			req.models.post.create(posts, function(err, items) {
+				if (err) res.send(err);
 				return;
-			}
+			});
+			
+			//res.send("Maybe we did something, posts: " + posts.length);
 
-			res.send("Found no posts");
-
-			ev.refresh_url = data.search_metadata.refresh_url;
+			//ev.refresh_url = data.search_metadata.refresh_url;
 
 			// update the event
 			//db.update('events', {_id:eventId}, ev, function(x) {
 			//	logger.log('updated the event');
 			//});
 
-			cb('Ok, stored ' + posts.length + ' posts\n');
+			//cb('Ok, stored ' + posts.length + ' posts\n');
 		});
 	});
 }
