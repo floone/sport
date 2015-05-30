@@ -1,6 +1,5 @@
 var express = require('express');
 var requireFu = require('require-fu');
-var mysqldb = require('./lib/mysqldb');
 
 var ctx = {};
 ctx.app = express();

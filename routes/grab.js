@@ -6,6 +6,7 @@ module.exports = function(ctx) {
 		}
 		var teamhash = '#' + ev.teama + ev.teamb;
 		var query = teamhash; 
+		// TODO exclude RTs in query
 		return '?q=' + encodeURIComponent(query) + '&result_type=recent&lang=de&count=100';
 	};
 
@@ -24,7 +25,7 @@ module.exports = function(ctx) {
 		ctx.twitter.find(qs, log, function(data) {
 			var posts = [];
 			var i;
-			for (i = 0; i < data.statuses.length; i++) {
+			for (i = data.statuses.length - 1; i >= 0; i--) {
 				var tweet = data.statuses[i];
 				if (!filterTweet(tweet)) {
 					posts.push({
@@ -34,8 +35,6 @@ module.exports = function(ctx) {
 					});
 				}
 			}
-
-			posts.reverse();
 
 			var t = new Date().getTime();
 			req.models.post.create(posts, function(err, items) {
@@ -47,14 +46,8 @@ module.exports = function(ctx) {
 			
 			res.send("Maybe we did something, posts: " + posts.length);
 
+			// TODO update the event
 			//ev.refresh_url = data.search_metadata.refresh_url;
-
-			// update the event
-			//db.update('events', {_id:eventId}, ev, function(x) {
-			//	logger.log('updated the event');
-			//});
-
-			//cb('Ok, stored ' + posts.length + ' posts\n');
 		});
 	});
 }
