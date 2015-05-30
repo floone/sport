@@ -16,6 +16,7 @@
     "express": "~3.4.4",
     "mysql": "2.7.0",
     "oauth": "*",
+    "orm": "2.1.26",
     "require-fu": "1.0.0"
   },
   "scripts": {
