@@ -17,8 +17,7 @@ module.exports = function(ctx) {
 		);
 	};
 
-	ctx.twitter = {};
-	ctx.twitter.getRequest = function(url, error, success) {
+	var getRequest = function(url, error, success) {
 		client().get(url, accessToken, accessTokenSecret, function(err, body, response) {
 			// console.log('Url: %s', url);
 			if (!err && response.statusCode == 200) {
@@ -28,4 +27,9 @@ module.exports = function(ctx) {
 			}
 		});
 	};
+
+	ctx.twitter = {};
+	ctx.twitter.find = function(query, error, success) {
+		getRequest(searchUrlBase + query, error, success);
+	}
 };
