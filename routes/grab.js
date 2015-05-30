@@ -36,12 +36,16 @@ module.exports = function(ctx) {
 			}
 
 			posts.reverse();
+
+			var t = new Date().getTime();
 			req.models.post.create(posts, function(err, items) {
 				if (err) res.send(err);
+				t = new Date().getTime() - t;
+				console.log("Imported " + posts.length + "posts in " + t + "ms");
 				return;
 			});
 			
-			//res.send("Maybe we did something, posts: " + posts.length);
+			res.send("Maybe we did something, posts: " + posts.length);
 
 			//ev.refresh_url = data.search_metadata.refresh_url;
 

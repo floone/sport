@@ -30,6 +30,7 @@ module.exports = function(ctx) {
 			});
 			db.sync(function(err) {
 				if (err) throw err;
+				/*
 				models.post.create([ { 
 					username: 'E. Figgemeier',
 					text: 'De Bruyne eindeutig der bessere Reus heute. 😝 #BVBWOB',
@@ -39,6 +40,7 @@ module.exports = function(ctx) {
 				} ], function(err, items) {
 					if (err) throw err;
 				});
+				*/
 			});
 		}
 	}));
