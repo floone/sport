@@ -1,6 +1,6 @@
 {
   "name": "sport",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Fetch and present sport related social media",
   "author": {
     "name": "Florian Zeller",
@@ -14,11 +14,15 @@
   },
   "dependencies": {
     "express": "~3.4.4",
-    "mysql": "2.7.0"
+    "mysql": "2.7.0",
+    "require-fu": "1.0.0"
+  },
+  "scripts": {
+    "start": "node main.js"
   },
   "devDependencies": {},
   "bundleDependencies": [],
 
   "private": true,
-  "main": "server.js"
+  "main": "main.js"
 }
