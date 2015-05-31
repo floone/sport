@@ -24,12 +24,21 @@ module.exports = function(ctx) {
 			models.event = db.define('event', {
 				teama:       { required: true, type: "text", size: 3 },
 				teamb:       { required: true, type: "text", size: 3 },
-				date:        { required: true, type: "date", time: true },
+				datetime:    { required: true, type: "date", time: true },
 				tags:        { required: false, type: "text" },
 				refresh_url: { required: false, type: "text" }
 			});
 			db.sync(function(err) {
 				if (err) throw err;
+				/*
+				models.event.create({
+					teama: 'WOB',
+					teamb: 'BVB',
+					datetime: '2015-05-31 16:00:00'
+				}, function(err, items) {
+					if (err) throw err;
+				});
+				*/
 				/*
 				models.post.create([ { 
 					username: 'E. Figgemeier',
