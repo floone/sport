@@ -37,7 +37,7 @@ module.exports = function(ctx) {
 		return posts;
 	}
 	
-	ctx.app.get("/grab", function(req, res) {
+	ctx.app.get("/grabposts", function(req, res) {
 		var log = function(s) { console.log(s); }
 		
 		// TODO consider timezone. Maybe set OPENSHIFT_MYSQL_TIMEZONE for my case.
