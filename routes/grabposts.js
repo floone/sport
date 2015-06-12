@@ -17,7 +17,7 @@ module.exports = function(ctx) {
 		postModel.create(posts, function(err, items) {
 			if (err) throw err;
 			t = new Date().getTime() - t;
-			console.log(qs + ': stored ' + posts.length + ' posts in ' + t + 'ms');
+			ctx.info(qs + ': stored ' + posts.length + ' posts in ' + t + 'ms');
 		});
 	}
 	
@@ -39,7 +39,7 @@ module.exports = function(ctx) {
 	}
 	
 	ctx.app.get("/grabposts", function(req, res) {
-		var log = function(s) { console.log(s); }
+		var log = function(s) { ctx.info(s); }
 		
 		// TODO consider timezone. Maybe set OPENSHIFT_MYSQL_TIMEZONE for my case.
 		req.models.event.find({}).where('datetime BETWEEN NOW() - INTERVAL 1 DAY AND NOW() + INTERVAL 1 DAY').run(function(err, events) {
