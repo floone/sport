@@ -59,4 +59,5 @@ module.exports = function(ctx) {
 			res.send('Processing ' + events.length + ' events...');
 		});
 	});
+	
 }

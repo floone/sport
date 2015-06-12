@@ -1,8 +1,8 @@
-var orm = require('orm');
-
-var MAX_READ = 20;
-
 module.exports = function(ctx) {
+	
+	var orm = require('orm');
+	
+	var MAX_READ = 20;
 	
 	var queryPosts = function(res, postsModel, eventId, sinceId) {
 		query = {};

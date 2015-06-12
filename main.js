@@ -24,4 +24,3 @@ var port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var server = ctx.app.listen(port, ipaddress, function () {
 	console.log('Listening at http://%s:%s', server.address().address, server.address().port);
 });
-

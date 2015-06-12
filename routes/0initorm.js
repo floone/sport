@@ -3,7 +3,9 @@ Date.prototype.toMysqlDate = function() {
 };
 
 module.exports = function(ctx) {
+	
 	var orm = require('orm');
+	
 	var opts = {
 		database: 'sport',
 		protocol: 'mysql',
@@ -17,6 +19,7 @@ module.exports = function(ctx) {
 			debug: false
 		}
 	};
+	
 	ctx.app.use(orm.express(opts, {
 		define: function(db, models) {
 			models.post = db.define('post', {
@@ -35,27 +38,8 @@ module.exports = function(ctx) {
 			});
 			db.sync(function(err) {
 				if (err) throw err;
-				/*
-				models.event.create({
-					teama: 'WOB',
-					teamb: 'BVB',
-					datetime: '2015-05-31 16:00:00'
-				}, function(err, items) {
-					if (err) throw err;
-				});
-				*/
-				/*
-				models.post.create([ { 
-					username: 'E. Figgemeier',
-					text: 'De Bruyne eindeutig der bessere Reus heute. 😝 #BVBWOB',
-					//created_at: 'FROM_UNIXTIME(1433012008)',
-					created_at: '2012-12-31 11:30:45',
-					media_url: null
-				} ], function(err, items) {
-					if (err) throw err;
-				});
-				*/
 			});
 		}
 	}));
+	
 }
