@@ -1,3 +1,7 @@
+Date.prototype.toMysqlDate = function() {
+	return this.toISOString().slice(0, 19).replace('T', ' ')
+};
+
 module.exports = function(ctx) {
 	var orm = require('orm');
 	var opts = {
