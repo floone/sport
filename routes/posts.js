@@ -1,33 +1,35 @@
-var MAX_READ = 20;
 var orm = require('orm');
+
+var MAX_READ = 20;
 
 module.exports = function(ctx) {
 	
-	ctx.app.get("/posts", function(req, res) {
-		req.models.post.find({}, MAX_READ, function(err, posts) {
+	var queryPosts = function(res, postsModel, eventId, sinceId) {
+		query = {};
+		if (eventId) {
+			if (isNaN(eventId)) ctx.error('eventId must be numeric', res, []);
+			query.event_id = eventId;
+		}
+		if (sinceId) {
+			if (isNaN(sinceId)) ctx.error('sinceId must be numeric', res, []);
+			query.id = orm.gt(sinceId);
+		}
+		postsModel.find(query, MAX_READ, function(err, posts) {
 			if (err) throw err;
 			res.send(posts);
 		});
+	}
+	
+	ctx.app.get("/posts", function(req, res) {
+		queryPosts(res, req.models.post, null, null);
 	});
 	
 	ctx.app.get("/posts/:eventId", function(req, res) {
-		if (isNaN(req.params.eventId)) ctx.error('eventId must be numeric', res, []);
-		req.models.post.find({ event_id: req.params.eventId }, MAX_READ, function(err, posts) {
-			if (err) throw err;
-			res.send(posts);
-		});
+		queryPosts(res, req.models.post, req.params.eventId, null);
 	});
 	
 	ctx.app.get("/posts/:eventId/since/:sinceId", function(req, res) {
-		if (isNaN(req.params.eventId)) ctx.error('eventId must be numeric', res, []);
-		if (isNaN(req.params.sinceId)) ctx.error('sinceId must be numeric', res, []);
-		req.models.post.find({ 
-			event_id: req.params.eventId,
-			id: orm.gt(req.params.sinceId)
-		}, MAX_READ, function(err, posts) {
-			if (err) throw err;
-			res.send(posts);
-		});
+		queryPosts(res, req.models.post, req.params.eventId, req.params.sinceId);
 	});
 	
 }
