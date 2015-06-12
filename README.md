@@ -2,6 +2,15 @@
 
 Turn social media data into a sport live stream.
 
+### General
+
+#### Example calls
+
+```
+    curl -s http://localhost:8080/posts/1 |jq '.[] | .username'
+	curl -s http://localhost:8080/posts/1/since/97 |jq '.[] | .id'
+```
+
 ### Openshift environment
 
 #### Bootstrap
