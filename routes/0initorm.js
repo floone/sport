@@ -20,6 +20,7 @@ module.exports = function(ctx) {
 	ctx.app.use(orm.express(opts, {
 		define: function(db, models) {
 			models.post = db.define('post', {
+				event_id:   { required: true, type: "integer" },
 				username:   { required: true, type: "text", size: 15 },
 				text:       { required: true, type: "text" },
 				created_at: { required: true, type: "date", time: true },

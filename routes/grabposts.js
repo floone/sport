@@ -21,13 +21,14 @@ module.exports = function(ctx) {
 		});
 	}
 	
-	var readPosts = function(data) {
+	var readPosts = function(data, eventId) {
 		var posts = [];
 		var i;
 		for (i = data.statuses.length - 1; i >= 0; i--) {
 			var tweet = data.statuses[i];
 			if (!filterTweet(tweet)) {
 				posts.push({
+					event_id: eventId,
 					username: tweet.user.screen_name,
 					text:     tweet.text,
 					created_at: new Date(tweet.created_at).toMysqlDate()
@@ -47,7 +48,7 @@ module.exports = function(ctx) {
 				var qs = getQueryString(ev);
 				
 				ctx.twitter.find(qs, log, function(data) {
-					var posts = readPosts(data);
+					var posts = readPosts(data, ev.id);
 					storePosts(req.models.post, posts, qs);
 					ev.refresh_url = data.search_metadata.refresh_url;
 					ev.save(function(err) {
