@@ -5,8 +5,7 @@ module.exports = function(ctx) {
 			return ev.refresh_url + '&count=100';
 		}
 		var teamhash = '#' + ev.teama + ev.teamb;
-		var query = teamhash; 
-		// TODO exclude RTs in query
+		var query = teamhash;
 		query += ' -RT';
 		return '?q=' + encodeURIComponent(query) + '&result_type=recent&lang=de&count=100';
 	};
@@ -25,6 +24,7 @@ module.exports = function(ctx) {
 	var readPosts = function(data, eventId) {
 		var posts = [];
 		var i;
+		var fetchedAt = new Date().toMysqlDate();
 		for (i = data.statuses.length - 1; i >= 0; i--) {
 			var tweet = data.statuses[i];
 			if (!filterTweet(tweet)) {
@@ -32,6 +32,7 @@ module.exports = function(ctx) {
 					event_id: eventId,
 					username: tweet.user.screen_name,
 					text:     tweet.text,
+					fetched_at: fetchedAt,
 					created_at: new Date(tweet.created_at).toMysqlDate(),
 					original_id_str: tweet.id_str,
 					profile_image_url: tweet.user.profile_image_url_https

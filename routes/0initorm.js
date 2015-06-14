@@ -29,6 +29,7 @@ module.exports = function(ctx) {
 			models.post = db.define('post', {
 				username:          { required: true, type: "text", size: 15 },
 				text:              { required: true, type: "text" },
+				fetched_at:        { required: true, type: "date", time: true },
 				created_at:        { required: true, type: "date", time: true },
 				original_id_str:   { required: true, type: "text", size: 21 },
 				profile_image_url: { required: false, type: "text" },
