@@ -16,9 +16,14 @@ ctx.debug = function(s) { console.log(new Date() + ' DEBUG ' + s); }
 requireFu(__dirname + '/routes')(ctx);
 
 ctx.app.get('/', function (req, res) {
-	var routes = [];
+	var routes = {};
+	routes.get = [];
 	ctx.app.routes.get.forEach(function(route) {
-		routes.push(route.path);
+		routes.get.push(route.path);
+	});
+	routes.post = [];
+	ctx.app.routes.post.forEach(function(route) {
+		routes.post.push(route.path);
 	});
 	res.send(routes);
 });
