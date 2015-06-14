@@ -24,7 +24,7 @@ module.exports = function(ctx) {
 		define: function(db, models) {
 			models.league = db.define('league', {
 				leaguename: { required: true, type: "text" },
-				table:      { required: false, type: "text" }
+				table:      { required: false, type: "object" }
 			});
 			models.post = db.define('post', {
 				username:          { required: true, type: "text", size: 15 },
@@ -40,6 +40,7 @@ module.exports = function(ctx) {
 				teamb:       { required: true, type: "text", size: 3 },
 				datetime:    { required: true, type: "date", time: true },
 				tags:        { required: false, type: "text" },
+				info:        { required: false, type: "text" },
 				refresh_url: { required: false, type: "text" }
 			});
 			models.event.hasOne('league', models.league, { required: true });
