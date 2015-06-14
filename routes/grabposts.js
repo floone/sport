@@ -7,6 +7,7 @@ module.exports = function(ctx) {
 		var teamhash = '#' + ev.teama + ev.teamb;
 		var query = teamhash; 
 		// TODO exclude RTs in query
+		query += ' -RT';
 		return '?q=' + encodeURIComponent(query) + '&result_type=recent&lang=de&count=100';
 	};
 	
@@ -33,7 +34,7 @@ module.exports = function(ctx) {
 					text:     tweet.text,
 					created_at: new Date(tweet.created_at).toMysqlDate(),
 					original_id_str: tweet.id_str,
-					profile_image_url: tweet.profile_image_url
+					profile_image_url: tweet.user.profile_image_url_https
 				});
 			}
 		}
