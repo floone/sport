@@ -15,19 +15,6 @@ ctx.debug = function(s) { console.log(new Date() + ' DEBUG ' + s); }
 
 requireFu(__dirname + '/routes')(ctx);
 
-ctx.app.get('/', function (req, res) {
-	var routes = {};
-	routes.get = [];
-	ctx.app.routes.get.forEach(function(route) {
-		routes.get.push(route.path);
-	});
-	routes.post = [];
-	ctx.app.routes.post.forEach(function(route) {
-		routes.post.push(route.path);
-	});
-	res.send(routes);
-});
-
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP   || "127.0.0.1"
 var port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var server = ctx.app.listen(port, ipaddress, function () {
