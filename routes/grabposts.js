@@ -31,7 +31,9 @@ module.exports = function(ctx) {
 					event_id: eventId,
 					username: tweet.user.screen_name,
 					text:     tweet.text,
-					created_at: new Date(tweet.created_at).toMysqlDate()
+					created_at: new Date(tweet.created_at).toMysqlDate(),
+					original_id_str: tweet.id_str,
+					profile_image_url: tweet.profile_image_url
 				});
 			}
 		}

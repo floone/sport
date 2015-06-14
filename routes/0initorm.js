@@ -23,13 +23,16 @@ module.exports = function(ctx) {
 	ctx.app.use(orm.express(opts, {
 		define: function(db, models) {
 			models.league = db.define('league', {
-				leaguename: { required: true, type: "text" }
+				leaguename: { required: true, type: "text" },
+				table:      { required: false, type: "text" }
 			});
 			models.post = db.define('post', {
-				username:   { required: true, type: "text", size: 15 },
-				text:       { required: true, type: "text" },
-				created_at: { required: true, type: "date", time: true },
-				media_url:  { required: false, type: "text" }
+				username:          { required: true, type: "text", size: 15 },
+				text:              { required: true, type: "text" },
+				created_at:        { required: true, type: "date", time: true },
+				original_id_str:   { required: true, type: "text", size: 21 },
+				profile_image_url: { required: false, type: "text" },
+				media_url:         { required: false, type: "text" }
 			});
 			models.event = db.define('event', {
 				teama:       { required: true, type: "text", size: 3 },
