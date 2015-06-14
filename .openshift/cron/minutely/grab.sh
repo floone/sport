@@ -1,0 +1,1 @@
+curl -s -X POST $OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin/posts/grab
