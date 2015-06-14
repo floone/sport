@@ -20,11 +20,38 @@ module.exports = function(ctx) {
 		}
 	};
 	
+	var createForeignKeys = function(db) {
+		
+		var statements = [];
+		
+		statements.push('ALTER TABLE event ADD CONSTRAINT FK_league_id FOREIGN KEY '
+		+ '(league_id) REFERENCES league(id) ON UPDATE CASCADE ON DELETE RESTRICT;');
+		
+		statements.push('ALTER TABLE post ADD CONSTRAINT FK_event_id FOREIGN KEY '
+		+ '(event_id) REFERENCES event(id) ON UPDATE CASCADE ON DELETE RESTRICT;');
+		
+		statements.forEach(function(statement) {
+			db.driver.execQuery(statement, function (err, data) {
+				if (err) {
+					if (String(err).indexOf('duplicate key') > -1) {
+						ctx.info('Foreign key already exists. Statement: ' + statement);
+					}
+					else {
+						throw err;
+					}
+				}
+				else {
+					ctx.info('Created index: ' + statement);
+				}
+			});
+		});
+	}
+	
 	ctx.app.use(orm.express(opts, {
 		define: function(db, models) {
 			models.league = db.define('league', {
-				leaguename: { required: true, type: "text" },
-				table:      { required: false, type: "object" }
+				league_name: { required: true, type: "text" },
+				table:       { required: false, type: "object" }
 			});
 			models.post = db.define('post', {
 				username:          { required: true, type: "text", size: 15 },
@@ -47,6 +74,7 @@ module.exports = function(ctx) {
 			models.post.hasOne('event', models.event, { required: true });
 			db.sync(function(err) {
 				if (err) throw err;
+				createForeignKeys(db)
 			});
 		}
 	}));

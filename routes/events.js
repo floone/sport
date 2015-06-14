@@ -24,7 +24,7 @@ module.exports = function(ctx) {
 		ev.datetime = new Date().toMysqlDate();
 		req.models.event.create(ev, function(err, items) {
 			if (err) throw err;
-			res.send({success: true})
+			res.send(items);
 		});
 	});
 	

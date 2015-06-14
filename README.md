@@ -15,6 +15,32 @@ Turn social media data into a sport live stream.
 
 ```
     select fetched_at, count(*) from post group by fetched_at;
+	drop table post; drop table event; drop table league;
+```
+
+#### Bootstrap
+```
+
+	# Remove tables in correct order
+	drop table post; drop table event; drop table league;
+	
+	# Start app
+	npm start
+	
+	# Insert league and test event
+	curl -s -X POST http://localhost:8080/admin/leagues/insert/Frauen%20WM%202015
+	
+	# Insert test event
+	curl -s -X POST http://localhost:8080/admin/events/insert/1/SUI/LIT
+	
+	# Grab posts for the only existing event 1
+	curl -s http://localhost:8080/admin/posts/grab
+	
+	# Query posts for event 1
+	curl -s http://localhost:8080/posts/1
+	
+	# List events for league 1
+	curl -s http://localhost:8080/events/1
 ```
 
 ### Openshift environment
