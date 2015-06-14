@@ -5,7 +5,7 @@ module.exports = function(ctx) {
 			return ev.refresh_url + '&count=100';
 		}
 		var teamhash = '#' + ev.teama + ev.teamb;
-		var query = teamhash;
+		var query = teamhash + ev.tags;
 		query += ' -RT';
 		return '?q=' + encodeURIComponent(query) + '&result_type=recent&lang=de&count=100';
 	};
