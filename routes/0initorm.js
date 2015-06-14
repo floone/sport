@@ -72,10 +72,20 @@ module.exports = function(ctx) {
 			});
 			models.event.hasOne('league', models.league, { required: true });
 			models.post.hasOne('event', models.event, { required: true });
-			db.sync(function(err) {
-				if (err) throw err;
-				createForeignKeys(db)
+			
+			db.driver.execQuery("select count(id) from post", function (err, data) {
+				if (err) {
+					ctx.info("Did not find post table, trying to initialize...");
+					db.sync(function(err) {
+						if (err) throw err;
+						createForeignKeys(db);
+					});
+				}
+				else {
+					ctx.info("Database already initialized -- manually delete tables to force initialization");
+				}
 			});
+			
 		}
 	}));
 	

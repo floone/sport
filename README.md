@@ -29,9 +29,10 @@ Turn social media data into a sport live stream.
 	
 	# Insert league and test event
 	curl -s -X POST http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin/leagues/insert/Frauen%20WM%202015
+	curl -s -X POST http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin/events/insert/1/SLO/ENG
 	
-	# Insert test event
-	curl -s -X POST http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin/events/insert/1/SUI/LIT
+	curl -s -X POST http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin/events/insert/1/GER/USA
+	curl -s -X POST http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin/events/insert/1/SLO/ENG
 	
 	# Grab posts for the only existing event 1
 	curl -s http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin/posts/grab
@@ -58,6 +59,8 @@ Turn social media data into a sport live stream.
     rhc ssh sport
     rhc tail -a sport
     rhc app show sport --gears quota
+	rhc tail sport -f app-root/logs/cron_minutely.log
+	rhc app restart -a sport
 ```
 
 #### Twitter environment variables
