@@ -22,8 +22,10 @@ module.exports = function(ctx) {
 	
 	ctx.app.use(orm.express(opts, {
 		define: function(db, models) {
+			models.league = db.define('league', {
+				leaguename: { required: true, type: "text" }
+			});
 			models.post = db.define('post', {
-				event_id:   { required: true, type: "integer" },
 				username:   { required: true, type: "text", size: 15 },
 				text:       { required: true, type: "text" },
 				created_at: { required: true, type: "date", time: true },
@@ -36,6 +38,8 @@ module.exports = function(ctx) {
 				tags:        { required: false, type: "text" },
 				refresh_url: { required: false, type: "text" }
 			});
+			models.event.hasOne('league', models.league, { required: true });
+			models.post.hasOne('event', models.event, { required: true });
 			db.sync(function(err) {
 				if (err) throw err;
 			});
