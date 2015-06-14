@@ -43,6 +43,8 @@ In order to be able to fetch data from Twitter, following environment variables 
 	rhc env set TW_CONSUMER_SECRET=... -a sport
 	rhc env set TW_ACCESS_TOKEN=... -a sport
 	rhc env set TW_ACCESS_TOKEN_SECRET=... -a sport
+	rhc env set MYSQL_USERNAME=... -a sport
+	rhc env set MYSQL_PASSWORD=... -a sport
 ```
 
 ### MySQL 5.5

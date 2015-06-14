@@ -11,8 +11,8 @@ module.exports = function(ctx) {
 		protocol: 'mysql',
 		host: process.env.OPENSHIFT_MYSQL_DB_HOST || "127.0.0.1",
 		port: process.env.OPENSHIFT_MYSQL_DB_PORT || 3306,
-		user: 'adminm9YzrXI',
-		password: '3mfbsClKVgyw',
+		user: process.env.MYSQL_USERNAME || 'root',
+		password: process.env.MYSQL_PASSWORD || '',
 		charset: 'utf8mb4',
 		query: {
 			pool: true,
