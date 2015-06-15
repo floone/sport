@@ -4,14 +4,15 @@ var requireFu = require('require-fu');
 var ctx = {};
 ctx.app = express();
 
+var isonow = function() { return new Date().toISOString(); }
 ctx.error = function(s, res, t) {
 	if (res && t) {
 		res.send(t);
 	}
-	throw new Date() + ' ERROR ' + s; 
+	throw isonow() + ' ERROR ' + s; 
 }
-ctx.info = function(s) { console.info(new Date() + ' INFO  ' + s); }
-ctx.debug = function(s) { console.log(new Date() + ' DEBUG ' + s); }
+ctx.info = function(s) { console.info(isonow() + ' INFO  ' + s); }
+ctx.debug = function(s) { console.log(isonow() + ' DEBUG ' + s); }
 
 requireFu(__dirname + '/routes')(ctx);
 
