@@ -20,6 +20,21 @@ module.exports = function(ctx) {
 		}
 	};
 	
+	var listConstraints = function(db, referencedTable) {
+		var stmt = "select "
+		+ "TABLE_NAME,COLUMN_NAME,CONSTRAINT_NAME,REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME "
+		+ "from INFORMATION_SCHEMA.KEY_COLUMN_USAGE where REFERENCED_TABLE_NAME = '" 
+		+ referencedTable + "'";
+		db.driver.execQuery(stmt, function (err, data) {
+			if (err) throw err;
+			var r = data[0];
+			var constraint = r.CONSTRAINT_NAME + ': '
+			+ r.TABLE_NAME + '.' + r.COLUMN_NAME + ' -> ' 
+			+ r.REFERENCED_TABLE_NAME + '.' + r.REFERENCED_COLUMN_NAME;
+			ctx.info(constraint);
+		});
+	}
+	
 	var createForeignKeys = function(db) {
 		
 		var statements = [];
@@ -83,6 +98,8 @@ module.exports = function(ctx) {
 				}
 				else {
 					ctx.info("Database already initialized -- manually delete tables to force initialization");
+					listConstraints(db, 'league');
+					listConstraints(db, 'event');
 				}
 			});
 			
