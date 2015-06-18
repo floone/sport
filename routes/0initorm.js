@@ -68,6 +68,14 @@ module.exports = function(ctx) {
 				league_name: { required: true, type: "text" },
 				table:       { required: false, type: "object" }
 			});
+			models.event = db.define('event', {
+				teama:       { required: true, type: "text", size: 3 },
+				teamb:       { required: true, type: "text", size: 3 },
+				datetime:    { required: true, type: "date", time: true },
+				tags:        { required: false, type: "text" },
+				info:        { required: false, type: "text" },
+				refresh_url: { required: false, type: "text" }
+			});
 			models.post = db.define('post', {
 				username:          { required: true, type: "text", size: 15 },
 				text:              { required: true, type: "text" },
@@ -76,14 +84,6 @@ module.exports = function(ctx) {
 				original_id_str:   { required: true, type: "text", size: 21 },
 				profile_image_url: { required: false, type: "text" },
 				media_url:         { required: false, type: "text" }
-			});
-			models.event = db.define('event', {
-				teama:       { required: true, type: "text", size: 3 },
-				teamb:       { required: true, type: "text", size: 3 },
-				datetime:    { required: true, type: "date", time: true },
-				tags:        { required: false, type: "text" },
-				info:        { required: false, type: "text" },
-				refresh_url: { required: false, type: "text" }
 			});
 			models.event.hasOne('league', models.league, { required: true });
 			models.post.hasOne('event', models.event, { required: true });
