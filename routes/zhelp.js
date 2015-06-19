@@ -1,6 +1,6 @@
 module.exports = function(ctx) {
 	
-	ctx.app.get('/', function (req, res) {
+	ctx.app.get('/help', function (req, res) {
 		var routes = {};
 		routes.get = [];
 		ctx.app.routes.get.forEach(function(route) {
