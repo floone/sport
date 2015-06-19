@@ -4,4 +4,4 @@ module.exports = function(ctx) {
 		res.send('Grabbing events...');
 	});
 
-}
+};

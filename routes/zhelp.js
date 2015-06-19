@@ -15,4 +15,4 @@ module.exports = function(ctx) {
 		res.send(routes);
 	});
 	
-}
+};

@@ -1,5 +1,5 @@
 Date.prototype.toMysqlDate = function() {
-	return this.toISOString().slice(0, 19).replace('T', ' ')
+	return this.toISOString().slice(0, 19).replace('T', ' ');
 };
 
 module.exports = function(ctx) {
@@ -21,29 +21,29 @@ module.exports = function(ctx) {
 	};
 	
 	var listConstraints = function(db, referencedTable) {
-		var stmt = "select "
-		+ "TABLE_NAME,COLUMN_NAME,CONSTRAINT_NAME,REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME "
-		+ "from INFORMATION_SCHEMA.KEY_COLUMN_USAGE where REFERENCED_TABLE_NAME = '" 
-		+ referencedTable + "'";
+		var stmt = "select " +
+		"TABLE_NAME,COLUMN_NAME,CONSTRAINT_NAME,REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME " +
+		"from INFORMATION_SCHEMA.KEY_COLUMN_USAGE where REFERENCED_TABLE_NAME = '" +
+		referencedTable + "'";
 		db.driver.execQuery(stmt, function (err, data) {
 			if (err) throw err;
 			var r = data[0];
-			var constraint = r.CONSTRAINT_NAME + ': '
-			+ r.TABLE_NAME + '.' + r.COLUMN_NAME + ' -> ' 
-			+ r.REFERENCED_TABLE_NAME + '.' + r.REFERENCED_COLUMN_NAME;
+			var constraint = r.CONSTRAINT_NAME + ': ' +
+			r.TABLE_NAME + '.' + r.COLUMN_NAME + ' -> ' +
+			r.REFERENCED_TABLE_NAME + '.' + r.REFERENCED_COLUMN_NAME;
 			ctx.info(constraint);
 		});
-	}
+	};
 	
 	var createForeignKeys = function(db) {
 		
 		var statements = [];
 		
-		statements.push('ALTER TABLE event ADD CONSTRAINT FK_league_id FOREIGN KEY '
-		+ '(league_id) REFERENCES league(id) ON UPDATE CASCADE ON DELETE RESTRICT;');
+		statements.push('ALTER TABLE event ADD CONSTRAINT FK_league_id FOREIGN KEY ' +
+		'(league_id) REFERENCES league(id) ON UPDATE CASCADE ON DELETE RESTRICT;');
 		
-		statements.push('ALTER TABLE post ADD CONSTRAINT FK_event_id FOREIGN KEY '
-		+ '(event_id) REFERENCES event(id) ON UPDATE CASCADE ON DELETE RESTRICT;');
+		statements.push('ALTER TABLE post ADD CONSTRAINT FK_event_id FOREIGN KEY ' +
+		'(event_id) REFERENCES event(id) ON UPDATE CASCADE ON DELETE RESTRICT;');
 		
 		statements.forEach(function(statement) {
 			db.driver.execQuery(statement, function (err, data) {
@@ -60,7 +60,7 @@ module.exports = function(ctx) {
 				}
 			});
 		});
-	}
+	};
 	
 	ctx.app.use(orm.express(opts, {
 		define: function(db, models) {
@@ -85,6 +85,11 @@ module.exports = function(ctx) {
 				profile_image_url: { required: false, type: "text" },
 				media_url:         { required: false, type: "text" }
 			});
+			models.team = db.define('team', {
+				team_name:        { required: true, type: "text" },
+				team_name_short:  { required: true, type: "text" },
+				common_tags:      { required: false, type: "object" }
+			});
 			models.event.hasOne('league', models.league, { required: true });
 			models.post.hasOne('event', models.event, { required: true });
 			
@@ -106,4 +111,4 @@ module.exports = function(ctx) {
 		}
 	}));
 	
-}
+};

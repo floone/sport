@@ -18,7 +18,7 @@ module.exports = function(ctx) {
 			if (err) throw err;
 			res.send(posts);
 		});
-	}
+	};
 	
 	ctx.app.get("/posts", function(req, res) {
 		queryPosts(res, req.models.post, null, null);
@@ -32,4 +32,4 @@ module.exports = function(ctx) {
 		queryPosts(res, req.models.post, req.params.eventId, req.params.sinceId);
 	});
 	
-}
+};

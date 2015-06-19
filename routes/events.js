@@ -10,7 +10,7 @@ module.exports = function(ctx) {
 			if (err) throw err;
 			res.send(events);
 		});
-	}
+	};
 	
 	ctx.app.get("/events/:leagueId", function(req, res) {
 		queryEvents(res, req.models.event, req.params.leagueId);
@@ -28,4 +28,4 @@ module.exports = function(ctx) {
 		});
 	});
 	
-}
+};

@@ -10,7 +10,7 @@ module.exports = function(ctx) {
 		return '?q=' + encodeURIComponent(query) + '&result_type=recent&lang=de&count=100';
 	};
 	
-	var filterTweet = function(post) { return false; }
+	var filterTweet = function(post) { return false; };
 	
 	var storePosts = function(postModel, posts, qs) {
 		var t = new Date().getTime();
@@ -19,7 +19,7 @@ module.exports = function(ctx) {
 			t = new Date().getTime() - t;
 			ctx.info(qs + ': stored ' + posts.length + ' posts in ' + t + 'ms');
 		});
-	}
+	};
 	
 	var readPosts = function(data, eventId) {
 		var posts = [];
@@ -40,10 +40,10 @@ module.exports = function(ctx) {
 			}
 		}
 		return posts;
-	}
+	};
 	
 	ctx.app.post("/admin/posts/grab", function(req, res) {
-		var log = function(s) { ctx.info(s); }
+		var log = function(s) { ctx.info(s); };
 		
 		// TODO consider timezone. Maybe set OPENSHIFT_MYSQL_TIMEZONE for my case.
 		req.models.event.find({}).where('datetime BETWEEN NOW() - INTERVAL 1 DAY AND NOW() + INTERVAL 1 DAY').run(function(err, events) {
@@ -64,4 +64,4 @@ module.exports = function(ctx) {
 		});
 	});
 	
-}
+};
