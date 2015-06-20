@@ -44,6 +44,16 @@ Turn social media data into a sport live stream.
 	curl -s http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/events/1
 ```
 
+#### Debug
+
+Use https://github.com/node-inspector/node-inspector
+
+```
+
+	npm install -g node-inspector
+	node-debug --web-port 8081 main.js
+```
+
 ### Openshift environment
 
 #### Bootstrap
