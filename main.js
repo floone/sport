@@ -21,6 +21,9 @@ ctx.app.set('json replacer', function replacer(key, value) {
 	return value;
 });
 
+if (!process.env.ADMIN_PASSWORD) throw 'env var ADMIN_PASSWORD must be set';
+ctx.auth = express.basicAuth('admin', process.env.ADMIN_PASSWORD);
+
 requireFu(__dirname + '/routes')(ctx);
 
 ctx.app.get('/', function (req, res) {

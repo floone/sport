@@ -14,7 +14,7 @@ module.exports = function(ctx) {
 		queryEvents(res, req.models.league, req.params.leagueId);
 	});
 	
-	ctx.app.post("/admin/leagues/insert/:leagueName", function(req, res) {
+	ctx.app.post("/admin/leagues/insert/:leagueName", ctx.auth, function(req, res) {
 		league = {};
 		league.league_name = req.params.leagueName;
 		req.models.league.create(league, function(err, items) {

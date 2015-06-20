@@ -15,8 +15,8 @@ module.exports = function(ctx) {
 	ctx.app.get("/events/:leagueId", function(req, res) {
 		queryEvents(res, req.models.event, req.params.leagueId);
 	});
-	
-	ctx.app.post("/admin/events/insert/:leagueId/:teama/:teamb", function(req, res) {
+
+	ctx.app.post("/admin/events/insert/:leagueId/:teama/:teamb", ctx.auth, function(req, res) {
 		ev = {};
 		ev.league_id = req.params.leagueId;
 		ev.teama = req.params.teama;
