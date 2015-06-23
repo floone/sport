@@ -5,7 +5,10 @@ module.exports = function(ctx) {
 			return ev.refresh_url + '&count=100';
 		}
 		var teamhash = '#' + ev.teama + ev.teamb;
-		var query = teamhash + ev.tags;
+		var query = teamhash;
+		if (ev.tags) {
+			query += ev.tags;
+		}
 		query += ' -RT';
 		return '?q=' + encodeURIComponent(query) + '&result_type=recent&lang=de&count=100';
 	};
@@ -43,15 +46,12 @@ module.exports = function(ctx) {
 	};
 	
 	ctx.app.post("/admin/posts/grab", ctx.auth, function(req, res) {
-		var log = function(s) { ctx.info(s); };
-		
-		// TODO consider timezone. Maybe set OPENSHIFT_MYSQL_TIMEZONE for my case.
 		req.models.event.find({}).where('datetime BETWEEN NOW() - INTERVAL 1 DAY AND NOW() + INTERVAL 1 DAY').run(function(err, events) {
 			if (err) throw err;
 			events.forEach(function(ev) {
 				var qs = getQueryString(ev);
 				
-				ctx.twitter.find(qs, log, function(data) {
+				ctx.twitter.find(qs, function(s) { ctx.debug(s); }, function(data) {
 					var posts = readPosts(data, ev.id);
 					storePosts(req.models.post, posts, qs);
 					ev.refresh_url = data.search_metadata.refresh_url;
@@ -60,7 +60,7 @@ module.exports = function(ctx) {
 					});
 				});
 			});
-			res.send('Processing ' + events.length + ' events...');
+			res.send('Processing ' + events.length + ' events.');
 		});
 	});
 	
