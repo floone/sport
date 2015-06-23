@@ -4,14 +4,33 @@ Turn social media data into a sport live stream.
 
 ### General
 
-#### Example REST calls
+#### Example GET requests
 
 	curl -s http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/posts/1 |jq '.[] | .username'
 	curl -s http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/posts/1/since/97 |jq '.[] | .id'
 
+#### Example POST requests
+
+Inserts can be triggered by posting JSON. The entity type is read from the url, the JSON must be the body of the request.
+
+Insert a league:
+
+	curl -u admin -d '{"league_name":"Bundesliga 2014/2015"}' -H "Content-Type: application/json" \
+		http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin/insert/league
+
+Insert an event:
+
+	curl -u admin -d '{"teama":"FCB","teamb":"HSV","datetime":"2015-06-23 21:00:00","league_id":1}' \
+		-H "Content-Type: application/json" http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin/insert/event
+
 #### Example Mysql queries
 
+Show stats: How many posts have been fetched at what time? Maybe helpful for peak detection.
+
 	select fetched_at, count(*) from post group by fetched_at;
+
+Wipe all data:
+
 	drop table post; drop table event; drop table league;
 
 #### Bootstrap
@@ -89,7 +108,7 @@ We are using node-orm2 which uses node-mysql under the hood. Fortunately, there 
 
 #### Timezone
 
-MySQL internally stores datetime as UTC. When selecting, it will convert to whatever is configured. When inserting, it will assume it to be in whatever is configured and convert to UTC. Thus, we configure UTC and leave conversion to the application. The application is responsible for providing datetimes in UTC format and interpreting them selected values as such as well.
+MySQL internally stores datetime as UTC. When selecting, it will convert to whatever is configured. When inserting, it will assume it to be in whatever is configured and convert to UTC. Thus, we configure UTC and leave conversion to the application. The application is responsible for providing datetimes in UTC format and interpreting the selected values as such as well.
 
 Use case: An event starts at some datetime. Our users are interested in when the event starts in their timezone, not in our servers timezone.
 

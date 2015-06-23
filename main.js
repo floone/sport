@@ -21,6 +21,8 @@ ctx.app.set('json replacer', function replacer(key, value) {
 	return value;
 });
 
+ctx.app.use(express.bodyParser());
+
 if (!process.env.ADMIN_PASSWORD) throw 'env var ADMIN_PASSWORD must be set';
 ctx.auth = express.basicAuth('admin', process.env.ADMIN_PASSWORD);
 
