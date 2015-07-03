@@ -67,9 +67,11 @@ cat $html_file \
 	|awk '{print $0","}' \
 	|grep -v Runde \
 	|awk 'NR%10{printf $0"";next;}1' \
-	|grep -v Resultat \
 	|grep -v ^,$ \
 		> $csv_file
+
+# Read round from html file in a separate pass
+round=$(awk -F". Runde" '{ print $1 }' $html_file |sed 's/.*\>//')
 
 echo "--- csv ---"
 cat $csv_file
@@ -89,7 +91,7 @@ while read line; do
 		echo " -- Not all shortnames configured, will skip line $line"
 	else
 		datetime=$(getTimeStamp $fdate $ftime)
-		json_search="{\"teama\":\"$shorta\",\"teamb\":\"$shortb\",\"league_id\":$league_id,\"round\":1}"
+		json_search="{\"teama\":\"$shorta\",\"teamb\":\"$shortb\",\"league_id\":$league_id,\"round\":$round}"
 		json_full="{\"datetime\":\"$datetime\",\"info\":\"$result\",${json_search:1}"
 		existing_id=$(curl -s -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json' -d "$json_search" $adminurl/findid/event)
 
