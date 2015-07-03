@@ -22,6 +22,24 @@ module.exports = function(ctx) {
 		});
 	});
 
+	ctx.app.post("/admin/update/:entity/:id", ctx.auth, function(req, res) {
+		req.models[req.params.entity].get(req.params.id, function(err, item) {
+			if (err) {
+				res.status(500).send(err);
+			}
+			else {
+				item.save(req.body, function(err, updatedItem) {
+					if (err) {
+						res.status(500).send(err);
+					}
+					else {
+						res.send(updatedItem);
+					}
+				});
+			}
+		});
+	});
+
 	ctx.app.post("/admin/findid/:entity", ctx.auth, function(req, res) {
 		console.log(req.body);
 		req.models[req.params.entity].find(req.body, function(err, items) {

@@ -85,22 +85,25 @@ while read line; do
 		echo "Not all shortnames configured, will skip line $line"
 	else
 		datetime=$(getTimeStamp $fdate $ftime)
-		json="{\"teama\":\"$shorta\",\"teamb\":\"$shortb\",\"datetime\":\"$datetime\",\"league_id\":$league_id,\"round\":1}"
+		json_search="{\"teama\":\"$shorta\",\"teamb\":\"$shortb\",\"league_id\":$league_id,\"round\":1}"
+		json_full="{\"datetime\":\"$datetime\",\"info\":\"$result\",${json_search:1}"
+	
 		adminurl="http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin"
-		existing_id=$(curl -s -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json' -d "$json" $adminurl/findid/event)
-
-		echo "Existing id: $existing_id"
+		existing_id=$(curl -s -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json' -d "$json_search" $adminurl/findid/event)
 
 		if [ "$existing_id" == "NOT_FOUND" ]; then
-			curl -s -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json' -w %{http_code} -d "$json" \
+			echo "Create new entry"
+			curl -s -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json' -w %{http_code} -d "$json_full" \
 				$adminurl/insert/event |grep 200 >/dev/null
-			if [ $? -eq 0 ]; then
-				echo "OK: $json"
-			else
-				echo "NOK: $json"
-			fi
 		else
-			echo "OK: $json (existing id: $existing_id)"
+			echo "Update entry with id $existing_id"
+			curl -s -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json' -w %{http_code} -d "$json_full" \
+				$adminurl/update/event/$existing_id |grep 200 >/dev/null
+		fi
+		if [ $? -eq 0 ]; then
+			echo "OK: $json"
+		else
+			echo "NOK: $json"
 		fi
 	fi
 done < $csv_file
