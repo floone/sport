@@ -86,12 +86,21 @@ while read line; do
 	else
 		datetime=$(getTimeStamp $fdate $ftime)
 		json="{\"teama\":\"$shorta\",\"teamb\":\"$shortb\",\"datetime\":\"$datetime\",\"league_id\":$league_id,\"round\":1}"
-		curl -s -u admin:$ADMIN_PASSWORD -H "Content-Type: application/json" -d "$json" \
-			--w %{http_code} http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin/insert/event |grep 200 >/dev/null
-		if [ $? -eq 0 ]; then
-			echo "OK: $json"
+		adminurl="http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin"
+		existing_id=$(curl -s -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json' -d "$json" $adminurl/findid/event)
+
+		echo "Existing id: $existing_id"
+
+		if [ "$existing_id" == "NOT_FOUND" ]; then
+			curl -s -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json' -w %{http_code} -d "$json" \
+				$adminurl/insert/event |grep 200 >/dev/null
+			if [ $? -eq 0 ]; then
+				echo "OK: $json"
+			else
+				echo "NOK: $json"
+			fi
 		else
-			echo "NOK: $json"
+			echo "OK: $json (existing id: $existing_id)"
 		fi
 	fi
 done < $csv_file
