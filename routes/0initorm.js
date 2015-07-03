@@ -42,6 +42,9 @@ module.exports = function(ctx) {
 		statements.push('ALTER TABLE event ADD CONSTRAINT FK_league_id FOREIGN KEY ' +
 		'(league_id) REFERENCES league(id) ON UPDATE CASCADE ON DELETE RESTRICT;');
 		
+		statements.push('ALTER TABLE event ADD CONSTRAINT UX_teams_leage_round ' +
+		'UNIQUE (teama, teamb, league_id, round);');
+
 		statements.push('ALTER TABLE post ADD CONSTRAINT FK_event_id FOREIGN KEY ' +
 		'(event_id) REFERENCES event(id) ON UPDATE CASCADE ON DELETE RESTRICT;');
 		
@@ -72,6 +75,7 @@ module.exports = function(ctx) {
 				teama:       { required: true, type: "text", size: 3 },
 				teamb:       { required: true, type: "text", size: 3 },
 				datetime:    { required: true, type: "date", time: true },
+				round:       { required: true, type: "integer" },
 				tags:        { required: false, type: "text" },
 				info:        { required: false, type: "text" },
 				refresh_url: { required: false, type: "text" }
