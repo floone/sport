@@ -41,7 +41,6 @@ module.exports = function(ctx) {
 	});
 
 	ctx.app.post("/admin/findid/:entity", ctx.auth, function(req, res) {
-		console.log(req.body);
 		req.models[req.params.entity].find(req.body, function(err, items) {
 			if (err) {
 				res.status(500).send(err);
@@ -50,7 +49,6 @@ module.exports = function(ctx) {
 				res.status(404).send("NOT_FOUND");
 			}
 			else {
-				console.log(items.length);
 				res.send("" + items[0].id);
 			}
 		});

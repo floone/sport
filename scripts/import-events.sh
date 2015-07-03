@@ -91,19 +91,20 @@ while read line; do
 		adminurl="http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin"
 		existing_id=$(curl -s -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json' -d "$json_search" $adminurl/findid/event)
 
+		action=NULL
 		if [ "$existing_id" == "NOT_FOUND" ]; then
-			echo "Create new entry"
+			action="CREATE"
 			curl -s -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json' -w %{http_code} -d "$json_full" \
 				$adminurl/insert/event |grep 200 >/dev/null
 		else
-			echo "Update entry with id $existing_id"
+			action="UPDATE $existing_id"
 			curl -s -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json' -w %{http_code} -d "$json_full" \
 				$adminurl/update/event/$existing_id |grep 200 >/dev/null
 		fi
 		if [ $? -eq 0 ]; then
-			echo "OK: $json"
+			echo "$action OK: $json_full"
 		else
-			echo "NOK: $json"
+			echo "$action NOK: $json_full"
 		fi
 	fi
 done < $csv_file
