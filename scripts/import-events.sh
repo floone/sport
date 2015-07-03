@@ -2,8 +2,8 @@
 
 die() { echo "$@" 1>&2 ; exit 1; }
 
-html_file="rnd_regular_act.html"
-csv_file="rnd_regular_act.csv"
+html_file="$OPENSHIFT_TMP_DIR/fixtures.html"
+csv_file="$OPENSHIFT_TMP_DIR/fixtures.csv"
 league_id=1
 adminurl="http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin"
 
@@ -95,6 +95,12 @@ while read line; do
 		json_full="{\"datetime\":\"$datetime\",\"info\":\"$result\",${json_search:1}"
 		existing_id=$(curl -s -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json' -d "$json_search" $adminurl/findid/event)
 
+		if [ "$existing_id" == "" ]; then
+			echo "Existing_id is empty, probably curl call failed. Repeat and exit."
+			curl -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json' -d "$json_search" $adminurl/findid/event
+			exit 1
+		fi
+
 		if [ "$existing_id" == "NOT_FOUND" ]; then
 			action="CREATE"
 			curl -s -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json' -w %{http_code} -d "$json_full" \
@@ -102,7 +108,7 @@ while read line; do
 		else
 			action="UPDATE $existing_id"
 			curl -s -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json' -w %{http_code} -d "$json_full" \
-				$adminurl/update/event/$existing_id |grep 200 >/dev/null
+				$adminurl/update/event/$existing_id |grep 200 >/dev/null || die "Update curl failed for id $existing_id"
 		fi
 
 		ok="NOK"
