@@ -5,10 +5,13 @@ die() { echo "$@" 1>&2 ; exit 1; }
 html_file="rnd_regular_act.html"
 csv_file="rnd_regular_act.csv"
 league_id=1
+adminurl="http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin"
 
 [ "$OPENSHIFT_NODEJS_IP" == "" ] && die "OPENSHIFT_NODEJS_IP must be set"
 [ "$OPENSHIFT_NODEJS_PORT" == "" ] && die "OPENSHIFT_NODEJS_PORT must be set"
 [ "$ADMIN_PASSWORD" == "" ] && die "ADMIN_PASSWORD must be set"
+
+[ -f $html_file ] || die "$html_file must exist"
 
 # Zurich time zone is used in html_file
 timezone=$(TZ=Europe/Zurich date +%Z)
@@ -57,6 +60,7 @@ getTimeStamp() { # $1 = 15.08.2015, $2 = 15:30
 	echo "$year-$month-$day $hours:$minutes:00"
 }
 
+# Parse html and write a csv file
 cat $html_file \
 	|sed -E $'s/<\/(h2|th|td)>/<\/\\1>\\\n/g' \
 	|sed -E 's/<[^>]*>//g' |sed -E 's/(\\S*|&nbsp;)//g' \
@@ -80,18 +84,15 @@ while read line; do
 	shorta=$( getShortName "$teama")
 	shortb=$( getShortName "$teamb")
 	if [ "$shorta" == "" ] || [ "$shortb" == "" ]; then
-		echo "Parse error, will skip line $line"
+		echo " -- Parse error, will skip line $line"
 	elif [ "$shorta" == "?" ] || [ "$shortb" == "?" ]; then
-		echo "Not all shortnames configured, will skip line $line"
+		echo " -- Not all shortnames configured, will skip line $line"
 	else
 		datetime=$(getTimeStamp $fdate $ftime)
 		json_search="{\"teama\":\"$shorta\",\"teamb\":\"$shortb\",\"league_id\":$league_id,\"round\":1}"
 		json_full="{\"datetime\":\"$datetime\",\"info\":\"$result\",${json_search:1}"
-	
-		adminurl="http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin"
 		existing_id=$(curl -s -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json' -d "$json_search" $adminurl/findid/event)
 
-		action=NULL
 		if [ "$existing_id" == "NOT_FOUND" ]; then
 			action="CREATE"
 			curl -s -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json' -w %{http_code} -d "$json_full" \
@@ -101,10 +102,9 @@ while read line; do
 			curl -s -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json' -w %{http_code} -d "$json_full" \
 				$adminurl/update/event/$existing_id |grep 200 >/dev/null
 		fi
-		if [ $? -eq 0 ]; then
-			echo "$action OK: $json_full"
-		else
-			echo "$action NOK: $json_full"
-		fi
+
+		ok="NOK"
+		[ $? -eq 0 ] && ok="OK"
+		echo "$action $ok: $json_full"
 	fi
 done < $csv_file
