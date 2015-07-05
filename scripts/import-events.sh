@@ -71,7 +71,10 @@ cat $html_file \
 		> $csv_file
 
 # Read round from html file in a separate pass
-round=$(awk -F". Runde" '{ print $1 }' $html_file |sed 's/.*\>//')
+round=$(awk -F". Runde" '{ print $1 }' $html_file |sed 's/.*>//')
+
+[ $round == "" ] && die "Could not parse round"
+echo " -- round $round"
 
 echo "--- csv ---"
 cat $csv_file
