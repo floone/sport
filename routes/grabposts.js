@@ -45,7 +45,7 @@ module.exports = function(ctx) {
 		return posts;
 	};
 	
-	ctx.app.post("/admin/posts/grab", ctx.auth, function(req, res) {
+	ctx.app.post("/admin/grab/posts", ctx.auth, function(req, res) {
 		req.models.event.find({}).where('datetime BETWEEN NOW() - INTERVAL 1 DAY AND NOW() + INTERVAL 1 DAY').run(function(err, events) {
 			if (err) throw err;
 			events.forEach(function(ev) {
