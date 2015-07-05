@@ -29,7 +29,7 @@ ctx.auth = express.basicAuth('admin', process.env.ADMIN_PASSWORD);
 requireFu(__dirname + '/routes')(ctx);
 
 ctx.app.get('/', function (req, res) {
-	res.send('ONLINE. See /help.');
+	res.send('ONLINE');
 });
 
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP   || "127.0.0.1";
