@@ -35,7 +35,7 @@ module.exports = function(ctx) {
 		});
 	};
 	
-	var createForeignKeys = function(db) {
+	var createConstraints = function(db) {
 		
 		var statements = [];
 		
@@ -102,11 +102,11 @@ module.exports = function(ctx) {
 					ctx.info("Did not find post table, trying to initialize...");
 					db.sync(function(err) {
 						if (err) throw err;
-						createForeignKeys(db);
+						createConstraints(db);
 					});
 				}
 				else {
-					ctx.info("Database already initialized -- manually delete tables to force initialization");
+					ctx.info("Database already initialized");
 					listConstraints(db, 'league');
 					listConstraints(db, 'event');
 				}
