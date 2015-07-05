@@ -16,16 +16,4 @@ module.exports = function(ctx) {
 		queryEvents(res, req.models.event, req.params.leagueId);
 	});
 
-	ctx.app.post("/admin/events/insert/:leagueId/:teama/:teamb", ctx.auth, function(req, res) {
-		ev = {};
-		ev.league_id = req.params.leagueId;
-		ev.teama = req.params.teama;
-		ev.teamb = req.params.teamb;
-		ev.datetime = new Date().toMysqlDate();
-		req.models.event.create(ev, function(err, items) {
-			if (err) throw err;
-			res.send(items);
-		});
-	});
-	
 };

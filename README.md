@@ -33,25 +33,6 @@ Wipe all data:
 
 	drop table post; drop table event; drop table league;
 
-#### Bootstrap
-
-The application auto-creates a Mysql schema when none of the tables is found.
-	
-	npm start
-	
-	# Insert league and test event
-	curl -s -X POST http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin/leagues/insert/Frauen%20WM%202015
-	curl -s -X POST http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin/events/insert/1/SLO/ENG
-	
-	# Grab posts for the only existing event 1
-	curl -s http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin/posts/grab
-	
-	# Query posts for event 1
-	curl -s http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/posts/1
-	
-	# List events for league 1
-	curl -s http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/events/1
-
 #### Debug
 
 Use https://github.com/node-inspector/node-inspector
