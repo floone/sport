@@ -2,7 +2,7 @@ module.exports = function(ctx) {
 	
 	var MAX_READ = 20;
 	
-	var queryEvents = function(res, model, leagueId) {
+	var queryEvents = function(res, model) {
 		query = {};
 		model.find(query, MAX_READ, function(err, leagues) {
 			if (err) throw err;
@@ -11,7 +11,7 @@ module.exports = function(ctx) {
 	};
 	
 	ctx.app.get("/leagues", function(req, res) {
-		queryEvents(res, req.models.league, req.params.leagueId);
+		queryEvents(res, req.models.league);
 	});
 
 };
