@@ -1,3 +1,1 @@
-MAILTO="florian.zeller@mail.com"
-echo "This is a test"
-exit 1
+echo "Some error occured" |mail -s "Cron error" "florian.zeller@gmail.com"
