@@ -8,8 +8,7 @@ assertEquals "$RESP" "0" ". | length"
 
 echo "-- Insert league"
 JSON='{"league_name":"Bundesliga 2014/2015"}'
-RESP=$(eval "$ADMIN_POST -d '$JSON' $ADMIN_URL/insert/league")
-assert "$RESP"
+assert "$(eval "$ADMIN_POST -d '$JSON' $ADMIN_URL/insert/league")"
 
 echo "-- Get leagues (we should find one element)"
 RESP=$(get $BASE_URL/leagues)
@@ -19,8 +18,7 @@ assertEquals "$RESP"  "Bundesliga 2014/2015" ".[] | .league_name"
 
 echo "-- Insert event"
 JSON='{"teama":"FCB","teamb":"HSV","datetime":"2015-06-23 21:00:00","league_id":1,"round":1}'
-RESP=$(eval "$ADMIN_POST -d '$JSON' $ADMIN_URL/insert/event")
-assert "$RESP"
+assert "$(eval "$ADMIN_POST -d '$JSON' $ADMIN_URL/insert/event")"
 
 echo "-- Get events (we should find one element)"
 RESP=$(get $BASE_URL/events/1)
