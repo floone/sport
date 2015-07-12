@@ -15,12 +15,26 @@ ADMIN_POST="curl -s -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json'
 
 cat db.sql |mysql -u root || die "Could not create database"
 
+function get {
+	GET_RESP=$(curl -s -w " http_code=%{http_code}" $1)
+	GET_JSON=$(echo $GET_RESP |awk -F"http_code=" '{ print $1 }')
+	GET_CODE=$(echo $GET_RESP |awk -F"http_code=" '{ print $2 }')
+	if [ "$GET_CODE" != "200" ]; then
+		die "Fail, HTTP response code: $GET_CODE, body = $GET_JSON"
+	fi
+	echo $GET_JSON
+}
+
 function assert {
 	#echo "$1"
-	echo "$1" |grep ' => 200' >/dev/null || die "Fail $1"
+	echo "$1" |grep ' => 200' >/dev/null
+	if [ "0" -ne "$?" ]; then
+		die "Fail (no HTTP 200 response): $1"
+	fi
 }
 
 function assertEquals { # json, expected, actual:jq-exp
+	echo $1 |jq "$3" >/dev/null || die "JSON can not be parsed '$1' with jq expression '$3'"
 	actual=$(echo $1 |jq "$3")
 	expected=$2
 	[ "$actual" == "$expected" ] || [ "$actual" == "\"$expected\"" ] || die \
