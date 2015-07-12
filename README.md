@@ -15,13 +15,16 @@ Inserts can be triggered by posting JSON. The entity type is read from the url, 
 
 Insert a league:
 
-	curl -u admin -d '{"league_name":"Bundesliga 2014/2015"}' -H "Content-Type: application/json" \
+	curl -u admin:$ADMIN_PASSWORD -d '{"league_name":"Bundesliga 2014/2015"}' \
+		-H "Content-Type: application/json" \
 		http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin/insert/league
 
 Insert an event:
 
-	curl -u admin:$ADMIN_PASSWORD -d '{"teama":"FCB","teamb":"HSV","datetime":"2015-06-23 21:00:00","league_id":1,"round":1}' \
-		-H "Content-Type: application/json" http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin/insert/event
+	curl -u admin:$ADMIN_PASSWORD -d \
+		'{"teama":"FCB","teamb":"HSV","datetime":"2015-06-23 21:00:00","league_id":1,"round":1}' \
+		-H "Content-Type: application/json" \
+		http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin/insert/event
 
 #### Example Mysql queries
 
