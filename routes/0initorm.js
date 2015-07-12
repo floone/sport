@@ -7,7 +7,7 @@ module.exports = function(ctx) {
 	var orm = require('orm');
 	
 	var opts = {
-		database: 'sport',
+		database: process.env.SPORT_DB_NAME || 'sport',
 		protocol: 'mysql',
 		host: process.env.OPENSHIFT_MYSQL_DB_HOST || "127.0.0.1",
 		port: process.env.OPENSHIFT_MYSQL_DB_PORT || 3306,
