@@ -20,7 +20,7 @@ Insert a league:
 
 Insert an event:
 
-	curl -u admin -d '{"teama":"FCB","teamb":"HSV","datetime":"2015-06-23 21:00:00","league_id":1}' \
+	curl -u admin:$ADMIN_PASSWORD -d '{"teama":"FCB","teamb":"HSV","datetime":"2015-06-23 21:00:00","league_id":1,"round":1}' \
 		-H "Content-Type: application/json" http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin/insert/event
 
 #### Example Mysql queries
@@ -94,7 +94,15 @@ MySQL internally stores datetime as UTC. When selecting, it will convert to what
 Use case: An event starts at some datetime. Our users are interested in when the event starts in their timezone, not in our servers timezone.
 
 	rhc env set OPENSHIFT_MYSQL_TIMEZONE="+00:00" -a sport
+	rhc env set TZ=UTC -a sport
 
 To do that in a local test instance of MySQL:
 
-	SET @@global.time_zone='+00:00';
+	SET time_zone = '+00:00';
+	SET @@global.time_zone = '+00:00';
+	SET GLOBAL time_zone = '+00:00';
+
+To check, use
+
+	SELECT @@global.time_zone, @@session.time_zone;
+	SELECT TIMEDIFF(NOW(),CONVERT_TZ(NOW(),@@session.time_zone,'+00:00'));

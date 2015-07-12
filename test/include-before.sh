@@ -16,7 +16,7 @@ ADMIN_POST="curl -s -u admin:$ADMIN_PASSWORD -H 'Content-Type: application/json'
 cat db.sql |mysql -u root || die "Could not create database"
 
 function assert {
-	echo "$1"
+	#echo "$1"
 	echo "$1" |grep ' => 200' >/dev/null || die "Fail $1"
 }
 
@@ -32,4 +32,4 @@ npm start &>$LOG &
 sleep 1
 grep 'Listening at' $LOG >/dev/null || die "App does not seem to be started"
 grep 'Did not find' $LOG >/dev/null || die "Database must be virgin"
-echo "App is started"
+echo "App is running, ready for tests"

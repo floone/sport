@@ -20,6 +20,14 @@ module.exports = function(ctx) {
 		}
 	};
 	
+	var listTimeZoneInfo = function(db) {
+		db.driver.execQuery("SELECT @@global.time_zone as 'gtz', @@session.time_zone as 'stz';", function (err, data) {
+			if (err) throw err;
+			var r = data[0];
+			ctx.info('TimeZone: ' + r.gtz + ', ' + r.stz);
+		});
+	};
+	
 	var listConstraints = function(db, referencedTable) {
 		var stmt = "select " +
 		"TABLE_NAME,COLUMN_NAME,CONSTRAINT_NAME,REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME " +
@@ -109,6 +117,7 @@ module.exports = function(ctx) {
 					ctx.info("Database already initialized");
 					listConstraints(db, 'league');
 					listConstraints(db, 'event');
+					listTimeZoneInfo(db);
 				}
 			});
 			
