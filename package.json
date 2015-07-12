@@ -4,10 +4,9 @@
   "description": "Fetch and present sport related social media",
   "author": {
     "name": "Florian Zeller",
-    "email": "florian.zeller@gmail.com",
-    "url": "http://www.openshift.com/"
+    "email": "florian.zeller@gmail.com"
   },
-  "homepage": "http://www.openshift.com/",
+  "homepage": "http://sport-floone.rhcloud.com",
   "engines": {
     "node": ">= 0.6.0",
     "npm": ">= 1.0.0"
@@ -22,9 +21,6 @@
   "scripts": {
     "start": "node main.js"
   },
-  "devDependencies": {},
-  "bundleDependencies": [],
-
   "private": true,
   "main": "main.js"
 }
