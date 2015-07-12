@@ -43,7 +43,10 @@ function assertEquals { # json, expected, actual:jq-exp
 
 cd ..
 npm start &>$LOG &
-sleep 1
+for i in {1..100}; do
+	grep 'Did not find' $LOG >/dev/null && break
+	sleep 0.05
+done
 grep 'Listening at' $LOG >/dev/null || die "App does not seem to be started"
 grep 'Did not find' $LOG >/dev/null || die "Database must be virgin"
 echo "App is running, ready for tests"
