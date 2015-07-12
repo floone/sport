@@ -25,15 +25,18 @@ function get {
 	echo $JSON
 }
 
-function assert {
-	#echo "$1"
+function assertOk {
 	echo "$1" |grep ' => 200' >/dev/null
 	if [ "0" -ne "$?" ]; then
 		die "Fail (no HTTP 200 response): $1"
 	fi
 }
 
-function assertEquals { # json, expected, actual:jq-exp
+# Assert equals, allows for quoted and unquoted values
+# $1: a valid json expression
+# $2: expected value
+# $3: a jq expression (= actual value)
+function assertEquals {
 	echo $1 |jq "$3" >/dev/null || die "JSON can not be parsed '$1' with jq expression '$3'"
 	local actual=$(echo $1 |jq "$3")
 	local expected=$2
