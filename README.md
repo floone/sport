@@ -5,14 +5,18 @@ Turn social media data into a sport live stream.
 ### Installation
 
 * Install NPM
-* Install MySQL, create a database - see db.sql
-* Set environment variables - see env.sh-template
-* npm install
-* npm start
+* Install MySQL, create a database - see `db.sql`
+* Set environment variables - see `env.sh-template`
+* `npm install`
+* `npm start`
 
 ### Getting started
 
-My favourite sport is organized in leagues. Create a league
+Call /help, all known routes will be exposed:
+
+	curl http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/
+
+My favourite sport is organized in leagues. Create a league:
 
 	curl -u admin:$ADMIN_PASSWORD -d '{"league_name":"Bundesliga 2014/2015"}' \
 		-H "Content-Type: application/json" \
