@@ -2,41 +2,38 @@
 
 Turn social media data into a sport live stream.
 
-### General
+### Installation
 
-#### Example GET requests
+* Install NPM
+* Install MySQL, create a database - see db.sql
+* Set environment variables - see env.sh-template
+* npm install
+* npm start
 
-	curl -s http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/posts/1 |jq '.[] | .username'
-	curl -s http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/posts/1/since/97 |jq '.[] | .id'
+### Getting started
 
-#### Example POST requests
-
-Inserts can be triggered by posting JSON. The entity type is read from the url, the JSON must be the body of the request.
-
-Insert a league:
+My favourite sport is organized in leagues. Create a league
 
 	curl -u admin:$ADMIN_PASSWORD -d '{"league_name":"Bundesliga 2014/2015"}' \
 		-H "Content-Type: application/json" \
 		http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin/insert/league
 
-Insert an event:
+In each season, a couple of events (games) take place. In most cases, the events are organized in rounds; however, there are exceptions to this rule like e.g. friendly games. Create an event:
 
 	curl -u admin:$ADMIN_PASSWORD -d \
-		'{"teama":"FCB","teamb":"HSV","datetime":"2015-06-23 21:00:00","league_id":1,"round":1}' \
-		-H "Content-Type: application/json" \
+		'{"teama":"FCB","teamb":"HSV","datetime":"2015-06-23 21:00:00",\
+		"league_id":1,"round":1}' -H "Content-Type: application/json" \
 		http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/admin/insert/event
 
-#### Example Mysql queries
+Now we can list the leagues, the (single) event of league 1, and the posts of this event:
 
-Show stats: How many posts have been fetched at what time? Maybe helpful for peak detection.
+	curl http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/leagues
+	curl http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/events/1
+	curl http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/posts/1
 
-	select fetched_at, count(*) from post group by fetched_at;
+A cron job periodically tries to find social media posts related to each current event.
 
-Wipe all data:
-
-	drop table post; drop table event; drop table league;
-
-#### Debug
+### Debug
 
 Use https://github.com/node-inspector/node-inspector
 
@@ -58,19 +55,17 @@ Use https://github.com/node-inspector/node-inspector
 	rhc tail sport -f app-root/logs/cron_minutely.log
 	rhc app restart -a sport
 
-#### Twitter environment variables
-
-In order to be able to fetch data from Twitter, following environment variables need to be set:
-
-	rhc env set TW_CONSUMER_KEY=... -a sport
-	rhc env set TW_CONSUMER_SECRET=... -a sport
-	rhc env set TW_ACCESS_TOKEN=... -a sport
-	rhc env set TW_ACCESS_TOKEN_SECRET=... -a sport
-	rhc env set MYSQL_USERNAME=... -a sport
-	rhc env set MYSQL_PASSWORD=... -a sport
-
 ### MySQL 5.5
 
+#### Example Mysql queries
+
+Show stats: How many posts have been fetched at what time? Maybe helpful for peak detection.
+
+	select fetched_at, count(*) from post group by fetched_at;
+
+Wipe all data:
+
+	drop table post; drop table event; drop table league; drop table team;
 
 #### Encoding
 
