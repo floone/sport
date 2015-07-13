@@ -12,9 +12,9 @@ Turn social media data into a sport live stream.
 
 ### Getting started
 
-Call /help, all known routes will be exposed:
+Call `/help`, all known routes will be exposed:
 
-	curl http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/
+	curl http://$OPENSHIFT_NODEJS_IP:$OPENSHIFT_NODEJS_PORT/help
 
 My favourite sport is organized in leagues. Create a league:
 
