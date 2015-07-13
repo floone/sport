@@ -2,6 +2,8 @@
 
 Turn social media data into a sport live stream.
 
+Test deployment: http://sport-floone.rhcloud.com/help.
+
 ### Installation
 
 * Install NPM
