@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<script id="exampletmpl" type="text/x-dot-template">
+		<h3>{{= it.name }}</h3>
+	</script>
+	<script type="text/javascript">
+		function formatDate(s) {
+			var d = new Date(s);
+			var m = d.getMinutes();
+			if (m < 9) m = "0" + m;
+			var h = d.getHours();
+			if (h < 9) h = "0" + h;
+			return h + ":" + m;
+		}
+	</script>
+	<script id="eventtmpl" type="text/x-dot-template">
+		{{~it :value:index}}
+			<div class="event">
+				<div class="eventdate">{{= formatDate(value.datetime) }}</div>
+				<div class="teama">{{= value.teama }}</div>
+				<div class="result">{{= value.info }}</div>
+				<div class="teamb" href="#{{=value.id}}">{{= value.teamb }}</div>
+			</div>
+		{{~}}
+	</script>
+	<link rel="stylesheet" type="text/css" href="css/sport.css" />
+</head>
+<body>
+	<div id="header">
+		<h1 id="title"><a href="#">Bundesliga</a></h1>
+		<h3 id="subtitle"></h3>
+	</div>
+	<div id="displayAllTrigger" style="display: none">
+		Display all2
+	</div>
+	<div id="content"></div>
+	<script src="js/doT.min.js" type="text/javascript"></script>
+	<script src="js/sport.js" type="text/javascript"></script>
+</body>
