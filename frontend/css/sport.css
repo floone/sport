@@ -1,0 +1,32 @@
+.container {
+	position: relative;
+	width: 100%;
+	max-width: 960px;
+	margin: 0 auto;
+	padding: 0 20px;
+	box-sizing: border-box;
+}
+
+.col {
+  width: 25%;
+  float: left;
+}
+
+.row {
+	background-color: #ddd;
+    border-radius: 6px;
+	margin-bottom: 10px;
+}
+
+.row div {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	font-size: 24px;
+}
+
+.container:after,
+.row:after {
+	content: "";
+	display: table;
+	clear: both;
+}
