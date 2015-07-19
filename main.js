@@ -21,14 +21,14 @@ ctx.app.set('json replacer', function replacer(key, value) {
 	return value;
 });
 
-ctx.app.use(express.urlencoded())
-ctx.app.use(express.json())
 ctx.app.use(express.compress());
+ctx.app.use(express.urlencoded());
+ctx.app.use(express.json());
 
 if (!process.env.ADMIN_PASSWORD) throw 'env var ADMIN_PASSWORD must be set';
 ctx.auth = express.basicAuth('admin', process.env.ADMIN_PASSWORD);
 
-if (process.env.TZ !== 'UTC') throw 'env var TZ must be set to UTC'
+if (process.env.TZ !== 'UTC') throw 'env var TZ must be set to UTC';
 
 requireFu(__dirname + '/routes')(ctx);
 

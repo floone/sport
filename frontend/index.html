@@ -8,22 +8,26 @@
 	</script>
 	<script type="text/javascript">
 		function formatDate(s) {
+			var pad = function(n) { return n < 9 ? "0" + n : n; }
+			var getHoursAndMinutes = function(d) {
+				if (d.getUTCHours() === 0 && d.getUTCMinutes() === 0) return '';
+				return pad(d.getHours()) + ":" + pad(d.getMinutes());
+			}
+			var getDayAndMonth = function(d) {
+				return pad(d.getDate()) + '.' + pad(d.getMonth() + 1) + '.';
+			}
 			var d = new Date(s);
-			var m = d.getMinutes();
-			if (m < 9) m = "0" + m;
-			var h = d.getHours();
-			if (h < 9) h = "0" + h;
-			return h + ":" + m;
+			return getDayAndMonth(d) + "<br/>" + getHoursAndMinutes(d);
 		}
 	</script>
 	<script id="eventtmpl" type="text/x-dot-template">
 		{{~it :value:index}}
-			<div class="event row">
+			<a class="event row" href="#{{= value.id }}">
 				<div class="col eventdate">{{= formatDate(value.datetime) }}</div>
 				<div class="col teama">{{= value.teama }}</div>
 				<div class="col result">{{= value.info }}</div>
 				<div class="col teamb" href="#{{=value.id}}">{{= value.teamb }}</div>
-			</div>
+			</a>
 		{{~}}
 	</script>
 	<link rel="stylesheet" type="text/css" href="css/normalize.min.css" />
@@ -32,7 +36,7 @@
 <body>
 	<div class="container">
 		<section class="header">
-			<h1><a href="#">Bundesliga</a></h1>
+			<h1><a href="#">Bundesliga 2015/2016</a></h1>
 		</section>
 		<div id="content"></div>
 	</div>

@@ -37,7 +37,7 @@ module.exports = function(ctx) {
 			if (err) {
 				res.status(500).send(err);
 			}
-			else if (items.length == 0) {
+			else if (items.length === 0) {
 				res.status(404).send("NOT_FOUND");
 			}
 			else {
