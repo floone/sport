@@ -32,11 +32,7 @@ if (process.env.TZ !== 'UTC') throw 'env var TZ must be set to UTC';
 
 requireFu(__dirname + '/routes')(ctx);
 
-ctx.app.use('/frontend', express.static('frontend'));
-
-ctx.app.get('/', function (req, res) {
-	res.send('ONLINE');
-});
+ctx.app.use('/', express.static('frontend'));
 
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP   || "127.0.0.1";
 var port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;

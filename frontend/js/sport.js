@@ -86,18 +86,23 @@
 	var onHashChange = function() {
 		clearTimeout(swatch);
 		lastPostId = 0;
-		//subtitle.innerHTML = '';
-		//displayAllTrigger.style.display = 'none';
 		var eventId = getEventId();
 		if (eventId === '') {
-			console.log('Will display events')
-			get('/events/1/1',
-				function(jsonStr) {
-					content.innerHTML = formatEvents(JSON.parse(jsonStr));
-					prettyTimes();
-				}, 
-				function(errStr) { console.log(errStr); }
-			);
+			console.log('Will display events');
+			staticJsonString = document.getElementById('json_event_data').innerHTML;
+			if (staticJsonString === '{"event_data":"[]"}') {
+				console.log('Found template string, calling server...')
+				get('/events/1/1',
+					function(jsonStr) {
+						content.innerHTML = formatEvents(JSON.parse(jsonStr));
+						prettyTimes();
+					},
+					function(errStr) { console.log(errStr); }
+				);
+			}
+			else {
+				content.innerHTML = formatEvents(JSON.parse(staticJsonString));
+			}
 		}
 		else {
 			content.innerHTML = '';
