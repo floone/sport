@@ -36,15 +36,20 @@ module.exports = function(ctx) {
 	ctx.app.set('views', 'frontend');
 	ctx.app.set('view engine', 'html');
 
-	ctx.app.get('/', function (req, res) {
-		
+	var getHomepage = function (req, res, template) {
 		query = {round:1};
 		req.models.event.find(query, 20, function(err, events) {
 			if (err) throw err;
-			res.render('index', {event_data:events}, function(err, content) {
+			res.render(template, {event_data:events}, function(err, content) {
 				res.send(content);
 			});
 		});
+	};
 
+	ctx.app.get('/', function (req, res) {
+		getHomepage(req, res, 'index');
+	});
+	ctx.app.get('/sp', function (req, res) {
+		getHomepage(req, res, 'index-sp');
 	});
 };
