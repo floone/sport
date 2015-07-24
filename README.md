@@ -2,7 +2,9 @@
 
 Turn social media data into a sport live stream.
 
-Test deployment: http://sport-floone.rhcloud.com/help.
+Test deployment: http://sport-floone.rhcloud.com/.
+
+All available calls: http://sport-floone.rhcloud.com/help.
 
 ### Installation
 
