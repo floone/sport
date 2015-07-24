@@ -72,21 +72,36 @@
 		//displayAllTrigger.style.display = 'none';
 		numberOfNewTweets = 0;
 	}
+	
+	var getEventId = function() {
+		return window.location.hash.replace('#', '');
+	}
+	
+	var updatePosts = function(showImmediately) {
+		var eventId = getEventId();
+		if (eventId === '') return;
+		console.log('Update posts of event ' + eventId);
+	}
 
 	var onHashChange = function() {
 		clearTimeout(swatch);
 		lastPostId = 0;
 		//subtitle.innerHTML = '';
 		//displayAllTrigger.style.display = 'none';
-		var hash = window.location.hash.replace('#', '');
-		if (hash === '') {
-			get('http://localhost:8080/events/1/1', 
+		var eventId = getEventId();
+		if (eventId === '') {
+			console.log('Will display events')
+			get('/events/1/1',
 				function(jsonStr) {
 					content.innerHTML = formatEvents(JSON.parse(jsonStr));
 					prettyTimes();
 				}, 
 				function(errStr) { console.log(errStr); }
 			);
+		}
+		else {
+			content.innerHTML = '';
+			updatePosts();
 		}
 	}
 	//var displayAllTrigger = document.getElementById('displayAllTrigger');
