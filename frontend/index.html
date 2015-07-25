@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<script id="exampletmpl" type="text/x-dot-template">
+		<h3>{{= it.name }}</h3>
+	</script>
+	<script type="application/json" id="json_event_data">{"event_data":"[]"}</script>
+	<script type="text/javascript">
+		function formatDate(s) {
+			var pad = function(n) { return n < 9 ? "0" + n : n; }
+			var getHoursAndMinutes = function(d) {
+				if (d.getUTCHours() === 0 && d.getUTCMinutes() === 0) return '';
+				return pad(d.getHours()) + ":" + pad(d.getMinutes());
+			}
+			var getDayAndMonth = function(d) {
+				return pad(d.getDate()) + '.' + pad(d.getMonth() + 1) + '.';
+			}
+			var d = new Date(s);
+			return getDayAndMonth(d) + "<br/>" + getHoursAndMinutes(d);
+		}
+	</script>
+	<script id="eventtmpl" type="text/x-dot-template">
+		{{~it :value:index}}
+			<a class="event row" href="#{{= value.id }}">
+				<div class="col eventdate">{{= formatDate(value.datetime) }}</div>
+				<div class="col teama">{{= value.teama }}</div>
+				<div class="col result">{{= value.info }}</div>
+				<div class="col teamb" href="#{{=value.id}}">{{= value.teamb }}</div>
+			</a>
+		{{~}}
+	</script>
+<style type="text/css">
+/*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background-color:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,strong{font-weight:bold}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-0.5em}sub{bottom:-0.25em}img{border:0}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{box-sizing:content-box;height:0}pre{overflow:auto}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{height:auto}input[type="search"]{-webkit-appearance:textfield;box-sizing:content-box}input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{border:0;padding:0}textarea{overflow:auto}optgroup{font-weight:bold}table{border-collapse:collapse;border-spacing:0}td,th{padding:0}
+</style>
+<style type="text/css">
+.container {
+	position: relative;
+	width: 100%;
+	max-width: 960px;
+	margin: 0 auto;
+	padding: 0 20px;
+	box-sizing: border-box;
+}
+.col {
+	width: 25%;
+	text-align: center;
+	float: left;
+}
+.eventdate     { width: 30%; }
+.teama, .teamb { width: 28%; }
+.result        { width: 14%; }
+.row {
+	background-color: #ddd;
+	color: #444;
+    border-radius: 6px;
+	margin-bottom: 10px;
+}
+a.row { display: block; }
+.row div {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.container:after,
+.row:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+/* typography */
+.teama, .teamb, .result {
+	font-size: 22px;
+}
+.eventdate {
+	font-size: 12px;
+}
+body { 
+	text-align: center;
+}
+h1 a {
+	font-size: 22px;
+	text-decoration: none;
+	color: #555;
+}
+</style>
+</head>
+<body>
+	<div class="container">
+		<section class="header">
+			<h1><a href="#">Bundesliga 2015/2016</a></h1>
+		</section>
+		<div id="content"></div>
+	</div>
+<script type="text/javascript">
+/* Laura Doktorova https://github.com/olado/doT */
+(function(){function o(){var a={"&":"&#38;","<":"&#60;",">":"&#62;",'"':"&#34;","'":"&#39;","/":"&#47;"},b=/&(?!#?\w+;)|<|>|"|'|\//g;return function(){return this?this.replace(b,function(c){return a[c]||c}):this}}function p(a,b,c){return(typeof b==="string"?b:b.toString()).replace(a.define||i,function(l,e,f,g){if(e.indexOf("def.")===0)e=e.substring(4);if(!(e in c))if(f===":"){a.defineParams&&g.replace(a.defineParams,function(n,h,d){c[e]={arg:h,text:d}});e in c||(c[e]=g)}else(new Function("def","def['"+
+e+"']="+g))(c);return""}).replace(a.use||i,function(l,e){if(a.useParams)e=e.replace(a.useParams,function(g,n,h,d){if(c[h]&&c[h].arg&&d){g=(h+":"+d).replace(/'|\\/g,"_");c.__exp=c.__exp||{};c.__exp[g]=c[h].text.replace(RegExp("(^|[^\\w$])"+c[h].arg+"([^\\w$])","g"),"$1"+d+"$2");return n+"def.__exp['"+g+"']"}});var f=(new Function("def","return "+e))(c);return f?p(a,f,c):f})}function m(a){return a.replace(/\\('|\\)/g,"$1").replace(/[\r\t\n]/g," ")}var j={version:"1.0.1",templateSettings:{evaluate:/\{\{([\s\S]+?(\}?)+)\}\}/g,
+interpolate:/\{\{=([\s\S]+?)\}\}/g,encode:/\{\{!([\s\S]+?)\}\}/g,use:/\{\{#([\s\S]+?)\}\}/g,useParams:/(^|[^\w$])def(?:\.|\[[\'\"])([\w$\.]+)(?:[\'\"]\])?\s*\:\s*([\w$\.]+|\"[^\"]+\"|\'[^\']+\'|\{[^\}]+\})/g,define:/\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,defineParams:/^\s*([\w$]+):([\s\S]+)/,conditional:/\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,iterate:/\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,varname:"it",strip:true,append:true,selfcontained:false},template:undefined,
+compile:undefined},q;if(typeof module!=="undefined"&&module.exports)module.exports=j;else if(typeof define==="function"&&define.amd)define(function(){return j});else{q=function(){return this||(0,eval)("this")}();q.doT=j}String.prototype.encodeHTML=o();var r={append:{start:"'+(",end:")+'",endencode:"||'').toString().encodeHTML()+'"},split:{start:"';out+=(",end:");out+='",endencode:"||'').toString().encodeHTML();out+='"}},i=/$^/;j.template=function(a,b,c){b=b||j.templateSettings;var l=b.append?r.append:
+r.split,e,f=0,g;a=b.use||b.define?p(b,a,c||{}):a;a=("var out='"+(b.strip?a.replace(/(^|\r|\n)\t* +| +\t*(\r|\n|$)/g," ").replace(/\r|\n|\t|\/\*[\s\S]*?\*\//g,""):a).replace(/'|\\/g,"\\$&").replace(b.interpolate||i,function(h,d){return l.start+m(d)+l.end}).replace(b.encode||i,function(h,d){e=true;return l.start+m(d)+l.endencode}).replace(b.conditional||i,function(h,d,k){return d?k?"';}else if("+m(k)+"){out+='":"';}else{out+='":k?"';if("+m(k)+"){out+='":"';}out+='"}).replace(b.iterate||i,function(h,
+d,k,s){if(!d)return"';} } out+='";f+=1;g=s||"i"+f;d=m(d);return"';var arr"+f+"="+d+";if(arr"+f+"){var "+k+","+g+"=-1,l"+f+"=arr"+f+".length-1;while("+g+"<l"+f+"){"+k+"=arr"+f+"["+g+"+=1];out+='"}).replace(b.evaluate||i,function(h,d){return"';"+m(d)+"out+='"})+"';return out;").replace(/\n/g,"\\n").replace(/\t/g,"\\t").replace(/\r/g,"\\r").replace(/(\s|;|\}|^|\{)out\+='';/g,"$1").replace(/\+''/g,"").replace(/(\s|;|\}|^|\{)out\+=''\+/g,"$1out+=");if(e&&b.selfcontained)a="String.prototype.encodeHTML=("+
+o.toString()+"());"+a;try{return new Function(b.varname,a)}catch(n){typeof console!=="undefined"&&console.log("Could not create a template function: "+a);throw n;}};j.compile=function(a,b){return j.template(a,null,b)}})();
+
+</script>
+<script type="text/javascript">
+(function() {
+	var get = function(url, cb, err) {
+		var request = new XMLHttpRequest();
+		request.onload = function() {
+			if (request.status >= 200 && request.status < 400) {
+				cb(request.responseText);
+			}
+			else {
+				err('got http code ' + request.status);
+			}
+		};
+		request.onerror = function() {
+			err('an error occurred when trying ' + url);
+		};
+		request.open('GET', url, true);
+		request.send();
+	}
+
+	var prettyDate = function(date) {
+		var s = Math.floor((new Date() - date) / 1000);
+		var i = Math.floor(s / 31536000);
+		if (i > 1) return i + 'y';
+		i = Math.floor(s / 2592000);
+		if (i > 1) return i + 'm';
+		i = Math.floor(s / 86400);
+		if (i >= 1) return i + 'd';
+		i = Math.floor(s / 3600);
+		if (i >= 1)  return i + 'h';
+		i = Math.floor(s / 60);
+		if (i >= 1) return i + 'm';
+		return Math.floor(s) + 's';
+	}
+
+	var prettyTimes = function() {
+		// update all <time> tags (posts view)
+		var times = document.getElementsByTagName('time');
+		for (var i = 0; i < times.length; i++) {
+			var dtStr = times[i].getAttribute('datetime');
+			if (dtStr) {
+				times[i].innerHTML = prettyDate(new Date(dtStr));
+			}
+		}
+		// update all <a> tags that have a data-time attribute (events view)
+		var events = document.getElementsByTagName('a');
+		for (var i = 0; i < events.length; i++) {
+			var dtStr = events[i].getAttribute('data-time');
+			if (dtStr) {
+				var dt = new Date(dtStr);
+				// TODO accessing the element by index is risky...
+				events[i].children[2].innerHTML = ('0' + dt.getHours()).slice(-2) + ':' + ('0' + dt.getMinutes()).slice(-2);
+			}
+		}
+	}
+
+	var INTERVAL = 20 * 1000;
+	var MAX_POSTS_ON_PAGE = 250;
+
+	var formatEvents = doT.template(document.getElementById('eventtmpl').text);
+	//var formatPosts = doT.template(document.getElementById('posttmpl').text);
+	var content = document.getElementById('content');
+	var swatch;
+	var lastPostId = 0;
+	var numberOfNewTweets = 0;
+	
+	var getEventId = function() {
+		return window.location.hash.replace('#', '');
+	};
+	
+	var updatePosts = function(showImmediately) {
+		var eventId = getEventId();
+		if (eventId === '' || isNaN(eventId)) return;
+		console.log('Update posts of event ' + eventId);
+		if (lastPostId === 0) content.innerHTML = '';
+		
+		get('/posts/' + eventId + '/since/' + lastPostId, function(jsonStr) {
+			var parsed = JSON.parse(jsonStr);
+			console.log(jsonStr);
+		});
+	};
+	
+	var updateEvents = function() {
+		console.log('Will display events');
+		getEventsJson(function(err, jsonStr) {
+			if (err) throw err;
+			content.innerHTML = formatEvents(JSON.parse(jsonStr));
+		});
+	}
+	
+	var getEventsJson = function(cb) {
+		var staticJsonString = document.getElementById('json_event_data').innerHTML;
+		if (staticJsonString === '{"event_data":"[]"}') {
+			console.log('Found template string, calling server...')
+			get('/events/1/1',
+				function(jsonStr) {
+					cb(null, jsonStr);
+				},
+				function(errStr) { throw errStr; }
+			);
+		}
+		else {
+			cb(null, staticJsonString);
+		}
+	};
+
+	var onHashChange = function() {
+		clearTimeout(swatch);
+		lastPostId = 0;
+		if (getEventId() === '') {
+			updateEvents();
+		}
+		else {
+			updatePosts();
+		}
+	};
+	
+	window.onhashchange = onHashChange;
+	onHashChange();
+})();
+</script>
+</body>
