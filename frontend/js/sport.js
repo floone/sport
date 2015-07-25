@@ -58,59 +58,61 @@
 	var formatEvents = doT.template(document.getElementById('eventtmpl').text);
 	//var formatPosts = doT.template(document.getElementById('posttmpl').text);
 	var content = document.getElementById('content');
-	//var displayAllTrigger = document.getElementById('displayAllTrigger');
-	//var subtitle = document.getElementById('subtitle');
 	var swatch;
 	var lastPostId = 0;
 	var numberOfNewTweets = 0;
-
-	var displayAll = function() {
-		var i;
-		for (i = 0; i < content.children.length; i++) {
-			content.children[i].style.display = '';
-		}
-		//displayAllTrigger.style.display = 'none';
-		numberOfNewTweets = 0;
-	}
 	
 	var getEventId = function() {
 		return window.location.hash.replace('#', '');
-	}
+	};
 	
 	var updatePosts = function(showImmediately) {
 		var eventId = getEventId();
-		if (eventId === '') return;
+		if (eventId === '' || isNaN(eventId)) return;
 		console.log('Update posts of event ' + eventId);
+		if (lastPostId === 0) content.innerHTML = '';
+		
+		get('/posts/' + eventId + '/since/' + lastPostId, function(jsonStr) {
+			var parsed = JSON.parse(jsonStr);
+			console.log(jsonStr);
+		});
+	};
+	
+	var updateEvents = function() {
+		console.log('Will display events');
+		getEventsJson(function(err, jsonStr) {
+			if (err) throw err;
+			content.innerHTML = formatEvents(JSON.parse(jsonStr));
+		});
 	}
+	
+	var getEventsJson = function(cb) {
+		var staticJsonString = document.getElementById('json_event_data').innerHTML;
+		if (staticJsonString === '{"event_data":"[]"}') {
+			console.log('Found template string, calling server...')
+			get('/events/1/1',
+				function(jsonStr) {
+					cb(null, jsonStr);
+				},
+				function(errStr) { throw errStr; }
+			);
+		}
+		else {
+			cb(null, staticJsonString);
+		}
+	};
 
 	var onHashChange = function() {
 		clearTimeout(swatch);
 		lastPostId = 0;
-		var eventId = getEventId();
-		if (eventId === '') {
-			console.log('Will display events');
-			staticJsonString = document.getElementById('json_event_data').innerHTML;
-			if (staticJsonString === '{"event_data":"[]"}') {
-				console.log('Found template string, calling server...')
-				get('/events/1/1',
-					function(jsonStr) {
-						content.innerHTML = formatEvents(JSON.parse(jsonStr));
-						prettyTimes();
-					},
-					function(errStr) { console.log(errStr); }
-				);
-			}
-			else {
-				content.innerHTML = formatEvents(JSON.parse(staticJsonString));
-			}
+		if (getEventId() === '') {
+			updateEvents();
 		}
 		else {
-			content.innerHTML = '';
 			updatePosts();
 		}
-	}
-	//var displayAllTrigger = document.getElementById('displayAllTrigger');
-	//displayAllTrigger.onclick = displayAll;
+	};
+	
 	window.onhashchange = onHashChange;
 	onHashChange();
 })();
