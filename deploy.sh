@@ -26,6 +26,5 @@ n=$((m + 1))
 echo "o Tagging release v$n"
 git tag "v$n"
 
-echo -n "o Start deployment... "
+echo "o Start deployment... "
 git push origin master >/dev/null
-echo "done.
