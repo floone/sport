@@ -20,14 +20,6 @@ module.exports = function(ctx) {
 				query.round = maxRound;
 				model.find(query, MAX_READ, function(err, events) {
 					if (err) throw err;
-					var toType = function(obj) {
-						return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
-					}
-					events.forEach(function(ev) {
-						console.log(toType(ev.datetime));
-						console.log(ev.datetime);
-						console.log(ev.datetime.toISOString());
-					});
 					res.send(events);
 				});
 			});
