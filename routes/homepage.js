@@ -49,7 +49,7 @@ module.exports = function(ctx) {
 	ctx.app.get('/', function (req, res) {
 		getHomepage(req, res, 'index');
 	});
-	ctx.app.get('/sp', function (req, res) {
-		getHomepage(req, res, 'index-sp');
+	ctx.app.get('/dev', function (req, res) {
+		getHomepage(req, res, 'index-dev');
 	});
 };
