@@ -75,6 +75,10 @@ module.exports = function(ctx) {
 	
 	ctx.app.use(orm.express(opts, {
 		define: function(db, models) {
+			
+			// memory cache expiration in seconds
+			db.settings.set('instance.cache', 60);
+			
 			models.league = db.define('league', {
 				league_name: { required: true, type: "text" },
 				table:       { required: false, type: "object" }
