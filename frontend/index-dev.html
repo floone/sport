@@ -18,6 +18,8 @@
 				return pad(d.getDate()) + '.' + pad(d.getMonth() + 1) + '.';
 			}
 			var d = new Date(s);
+			if (isNaN(d.getDay())) d = new Date(s.replace(' ', 'T') + '.000Z');
+			if (isNaN(d.getDay())) return '';
 			return getDayAndMonth(d) + "<br/>" + getHoursAndMinutes(d);
 		}
 	</script>
