@@ -7,9 +7,7 @@ echo "o Run test cases"
 cd test && ./test-happypath.sh >/dev/null && cd .. || die "Test failures"
 
 echo "o Generate single index file"
-cd frontend \
-  && ../scripts/inline-resources.sh index-dev.html >index.html \
-  && cd .. || die "Generate single index file failed"
+./inline.sh || die "Generate single index file failed"
 
 git status |grep "frontend/index.html" >/dev/null  && git add "frontend/index.html" >/dev/null
 git diff --exit-code >/dev/null || die add "frontend/index.html" >/dev/null \
