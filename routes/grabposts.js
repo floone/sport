@@ -31,6 +31,12 @@ module.exports = function(ctx) {
 		for (i = data.statuses.length - 1; i >= 0; i--) {
 			var tweet = data.statuses[i];
 			if (!filterTweet(tweet)) {
+				
+				var media_url = null;
+				if (tweet.entities.media && tweet.entities.media[0].type === 'photo') {
+					media_url = tweet.entities.media[0].media_url;
+				}
+				
 				posts.push({
 					event_id: eventId,
 					username: tweet.user.screen_name,
@@ -38,7 +44,8 @@ module.exports = function(ctx) {
 					fetched_at: fetchedAt,
 					created_at: new Date(tweet.created_at).toMysqlDate(),
 					original_id_str: tweet.id_str,
-					profile_image_url: tweet.user.profile_image_url_https
+					profile_image_url: tweet.user.profile_image_url_https,
+					media_url: media_url
 				});
 			}
 		}

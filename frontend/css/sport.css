@@ -53,6 +53,7 @@ a.row { display: block; }
 }
 .postimage {
 	margin-top: 12px;
+	max-width: 100%;
 }
 
 /* typography */

@@ -41,6 +41,11 @@
 					<time datetime="{{=value.created_at}}">{{=value.created_at}}</time>
 				</div>
 				<div class="posttext">{{=value.text}}</div>
+				{{? value.media_url }}
+					<a href="{{=value.media_url}}">
+						<img class="postimage" src="{{=value.media_url}}" />
+					</a>
+				{{?}}
 			</div>
 		{{~}}
 	</script>
