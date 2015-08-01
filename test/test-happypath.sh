@@ -30,8 +30,31 @@ assertEquals "$RESP"  "2015-06-23T21:00:00.000Z" ".[] | .datetime"
 assertEquals "$RESP"  "1" ".[] | .league_id"
 assertEquals "$RESP"  "1" ".[] | .round"
 
-echo "-- Insert post"
-JSON='{"username":"tester","text":"This is a test.","fetched_at":"2015-08-06 18:13:47","created_at":"2015-08-06 18:08:10","original_id_str":"C0FFEEBABE","event_id":1}'
-assertOk "$(eval "$ADMIN_POST -d '$JSON' $ADMIN_URL/insert/post")"
+echo "-- Insert posts"
+for i in $(seq 1 1 100); do
+    JSON='{"username":"tester","text":"This is a test post","fetched_at":"2015-08-06 18:13:47","created_at":"2015-08-06 18:08:10","original_id_str":"C0FFEEBABE","event_id":1}'
+    assertOk "$(eval "$ADMIN_POST -d '$JSON' $ADMIN_URL/insert/post")"
+done
+
+echo "-- Get posts"
+RESP=$(get $BASE_URL/posts/1)
+assertEquals "$RESP" "50" ". | length"
+for i in $(seq 1 1 50); do
+    assertEquals "$RESP" "$i" ".[$(( i-1 ))] | .id"
+done
+
+echo "-- Get posts since"
+RESP=$(get $BASE_URL/posts/1/since/20)
+assertEquals "$RESP" "50" ". | length"
+for i in $(seq 1 1 50); do
+    assertEquals "$RESP" "$(( i + 20 ))" ".[$(( i-1 ))] | .id"
+done
+
+echo "-- Get posts since II"
+RESP=$(get $BASE_URL/posts/1/since/90)
+assertEquals "$RESP" "10" ". | length"
+for i in $(seq 1 1 10); do
+    assertEquals "$RESP" "$(( i + 90 ))" ".[$(( i-1 ))] | .id"
+done
 
 cd - >/dev/null && . include-after.sh
