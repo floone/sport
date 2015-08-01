@@ -69,14 +69,33 @@
 	var updatePosts = function(showImmediately) {
 		var eventId = getEventId();
 		if (eventId === '' || isNaN(eventId)) return;
-		console.log('Update posts of event ' + eventId);
+		console.log('update posts of event ' + eventId);
 		if (lastPostId === 0) content.innerHTML = '';
 		
-		get('/posts/' + eventId + '/since/' + lastPostId, function(jsonStr) {
+		var url = '/posts/' + eventId + '/since/' + lastPostId;
+		console.log('get ' + url);
+		get(url, function(jsonStr) {
 			var parsed = JSON.parse(jsonStr);
-			console.log(jsonStr);
-			content.innerHTML = formatPosts(JSON.parse(jsonStr));
-			prettyTimes();
+			console.log('got ' + parsed.length + ' events');
+			
+			if (parsed.length > 0) {
+				lastPostId = parsed[0].id;
+				var updates = formatPosts(parsed);
+				if (content.hasChildNodes()) {
+					console.log('prepend');
+					content.children[0].insertAdjacentHTML('beforebegin', updates);
+				}
+				else {
+					console.log('first call');
+					content.innerHTML = updates;
+				}
+				var i;
+				for (i = content.children.length - 1; i >= MAX_POSTS_ON_PAGE; i--) {
+					content.removeChild(content.children[i]);
+				}
+				prettyTimes();
+			}
+			setTimeout(updatePosts, INTERVAL);
 		});
 	};
 	
