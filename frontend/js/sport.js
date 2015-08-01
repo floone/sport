@@ -76,6 +76,7 @@
 			var parsed = JSON.parse(jsonStr);
 			console.log(jsonStr);
 			content.innerHTML = formatPosts(JSON.parse(jsonStr));
+			prettyTimes();
 		});
 	};
 	
