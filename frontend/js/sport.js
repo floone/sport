@@ -58,8 +58,10 @@
 	var formatEvents = doT.template(document.getElementById('eventtmpl').text);
 	var formatPosts = doT.template(document.getElementById('posttmpl').text);
 	var content = document.getElementById('content');
+	var displayAllTrigger = document.getElementById('displayAllTrigger');
 	var swatch;
 	var lastPostId = 0;
+	var numberOfNewTweets = 0;
 	var numberOfNewTweets = 0;
 	
 	var getEventId = function() {
@@ -81,6 +83,8 @@
 			if (parsed.length > 0) {
 				lastPostId = parsed[0].id;
 				var updates = formatPosts(parsed);
+				
+				// insert nodes
 				if (content.hasChildNodes()) {
 					console.log('prepend');
 					content.children[0].insertAdjacentHTML('beforebegin', updates);
@@ -89,6 +93,19 @@
 					console.log('first call');
 					content.innerHTML = updates;
 				}
+				
+				// set visibility or show trigger button
+				if (showImmediately) {
+					console.log('show all');
+					displayAll();
+				}
+				else {
+					console.log('show trigger');
+					numberOfNewTweets = Math.min(numberOfNewTweets + parsed.length, MAX_POSTS_ON_PAGE);
+					displayAllTrigger.innerHTML = 'Show ' + numberOfNewTweets + ' new posts...';
+					displayAllTrigger.style.display = '';
+				}
+				
 				var i;
 				for (i = content.children.length - 1; i >= MAX_POSTS_ON_PAGE; i--) {
 					content.removeChild(content.children[i]);
@@ -98,6 +115,15 @@
 			setTimeout(updatePosts, INTERVAL);
 		});
 	};
+	
+	var displayAll = function() {
+		var i;
+		for (i = 0; i < content.children.length; i++) {
+			content.children[i].style.display = '';
+		}
+		displayAllTrigger.style.display = 'none';
+		numberOfNewTweets = 0;
+	}
 	
 	var updateEvents = function() {
 		console.log('Will display events');
@@ -130,10 +156,11 @@
 			updateEvents();
 		}
 		else {
-			updatePosts();
+			updatePosts(true);
 		}
 	};
 	
+	displayAllTrigger.onclick = displayAll;
 	window.onhashchange = onHashChange;
 	onHashChange();
 })();

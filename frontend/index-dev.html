@@ -35,7 +35,7 @@
 	</script>
 	<script id="posttmpl" type="text/x-dot-template">
 		{{~it :value:index}}
-			<div id="post{{=value.id}}" class="post">
+			<div id="post{{=value.id}}" class="post" style="display: none">
 				<div class="postheader">
 					<strong>{{=value.username}}</strong>&nbsp;
 					<time datetime="{{=value.created_at}}">{{=value.created_at}}</time>
@@ -57,6 +57,9 @@
 		<section class="header">
 			<h1><a href="#">Sport</a></h1>
 		</section>
+		<div id="displayAllTrigger" style="display: none">
+			Display all
+		</div>
 		<div id="content"></div>
 	</div>
 	<script src="js/doT.min.js" type="text/javascript"></script>
