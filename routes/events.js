@@ -1,10 +1,19 @@
 module.exports = function(ctx) {
 	
+	var orm = require('orm');
 	var MAX_READ = 20;
 	
-	var queryEvents = function(res, model) {
-		query = {};
+	ctx.queryLatestEvents = function(model, cb) {
+		var d = new Date();
+		d.setHours(d.getHours() - 4);
+		query = { datetime: orm.gt(d) };
 		model.find(query, 6, [ 'datetime', 'A' ], function(err, events) {
+			cb(err, events);
+		});
+	};
+	
+	var queryEvents = function(res, model) {
+		ctx.queryLatestEvents(model, function(err, events) {
 			if (err) throw err;
 			res.send(events);
 		});
