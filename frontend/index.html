@@ -35,7 +35,7 @@
 	</script>
 	<script id="posttmpl" type="text/x-dot-template">
 		{{~it :value:index}}
-			<div id="post{{=value.id}}" class="post">
+			<div id="post{{=value.id}}" class="post" style="display: none">
 				<div class="postheader">
 					<strong>{{=value.username}}</strong>&nbsp;
 					<time datetime="{{=value.created_at}}">{{=value.created_at}}</time>
@@ -111,6 +111,17 @@ a.row { display: block; }
 	max-width: 100%;
 }
 
+#displayAllTrigger {
+	margin: 8px;
+	margin-bottom: 12px;
+	padding: 8px;
+	border: 1px solid #bbb;
+	border-radius: 6px;
+	background-color: #ddd;
+	line-height:2;
+	text-decoration:none;
+}
+
 /* typography */
 .teama, .teamb, .result {
 	font-size: 22px;
@@ -133,6 +144,9 @@ h1 a {
 		<section class="header">
 			<h1><a href="#">Sport</a></h1>
 		</section>
+		<div id="displayAllTrigger" style="display: none">
+			Display all
+		</div>
 		<div id="content"></div>
 	</div>
 <script type="text/javascript">
@@ -207,8 +221,10 @@ o.toString()+"());"+a;try{return new Function(b.varname,a)}catch(n){typeof conso
 	var formatEvents = doT.template(document.getElementById('eventtmpl').text);
 	var formatPosts = doT.template(document.getElementById('posttmpl').text);
 	var content = document.getElementById('content');
+	var displayAllTrigger = document.getElementById('displayAllTrigger');
 	var swatch;
 	var lastPostId = 0;
+	var numberOfNewTweets = 0;
 	var numberOfNewTweets = 0;
 	
 	var getEventId = function() {
@@ -218,16 +234,59 @@ o.toString()+"());"+a;try{return new Function(b.varname,a)}catch(n){typeof conso
 	var updatePosts = function(showImmediately) {
 		var eventId = getEventId();
 		if (eventId === '' || isNaN(eventId)) return;
-		console.log('Update posts of event ' + eventId);
+		console.log('update posts of event ' + eventId);
 		if (lastPostId === 0) content.innerHTML = '';
 		
-		get('/posts/' + eventId + '/since/' + lastPostId, function(jsonStr) {
+		var url = '/posts/' + eventId + '/since/' + lastPostId;
+		console.log('get ' + url);
+		get(url, function(jsonStr) {
 			var parsed = JSON.parse(jsonStr);
-			console.log(jsonStr);
-			content.innerHTML = formatPosts(JSON.parse(jsonStr));
-			prettyTimes();
+			console.log('got ' + parsed.length + ' events');
+			
+			if (parsed.length > 0) {
+				lastPostId = parsed[0].id;
+				var updates = formatPosts(parsed);
+				
+				// insert nodes
+				if (content.hasChildNodes()) {
+					console.log('prepend');
+					content.children[0].insertAdjacentHTML('beforebegin', updates);
+				}
+				else {
+					console.log('first call');
+					content.innerHTML = updates;
+				}
+				
+				// set visibility or show trigger button
+				if (showImmediately) {
+					console.log('show all');
+					displayAll();
+				}
+				else {
+					console.log('show trigger');
+					numberOfNewTweets = Math.min(numberOfNewTweets + parsed.length, MAX_POSTS_ON_PAGE);
+					displayAllTrigger.innerHTML = 'Show ' + numberOfNewTweets + ' new posts...';
+					displayAllTrigger.style.display = '';
+				}
+				
+				var i;
+				for (i = content.children.length - 1; i >= MAX_POSTS_ON_PAGE; i--) {
+					content.removeChild(content.children[i]);
+				}
+				prettyTimes();
+			}
+			setTimeout(updatePosts, INTERVAL);
 		});
 	};
+	
+	var displayAll = function() {
+		var i;
+		for (i = 0; i < content.children.length; i++) {
+			content.children[i].style.display = '';
+		}
+		displayAllTrigger.style.display = 'none';
+		numberOfNewTweets = 0;
+	}
 	
 	var updateEvents = function() {
 		console.log('Will display events');
@@ -260,10 +319,11 @@ o.toString()+"());"+a;try{return new Function(b.varname,a)}catch(n){typeof conso
 			updateEvents();
 		}
 		else {
-			updatePosts();
+			updatePosts(true);
 		}
 	};
 	
+	displayAllTrigger.onclick = displayAll;
 	window.onhashchange = onHashChange;
 	onHashChange();
 })();
