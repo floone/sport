@@ -91,7 +91,7 @@ h1 a {
 <body>
 	<div class="container">
 		<section class="header">
-			<h1><a href="#">Bundesliga 2015/2016</a></h1>
+			<h1><a href="#">Sport</a></h1>
 		</section>
 		<div id="content"></div>
 	</div>
@@ -199,7 +199,7 @@ o.toString()+"());"+a;try{return new Function(b.varname,a)}catch(n){typeof conso
 		var staticJsonString = document.getElementById('json_event_data').innerHTML;
 		if (staticJsonString === '{"event_data":"[]"}') {
 			console.log('Found template string, calling server...')
-			get('/events/1/1',
+			get('/events',
 				function(jsonStr) {
 					cb(null, jsonStr);
 				},

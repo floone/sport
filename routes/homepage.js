@@ -37,8 +37,8 @@ module.exports = function(ctx) {
 	ctx.app.set('view engine', 'html');
 
 	var getHomepage = function (req, res, template) {
-		query = {round:1};
-		req.models.event.find(query, 20, function(err, events) {
+		query = {};
+		req.models.event.find(query, 6, [ 'datetime', 'A' ], function(err, events) {
 			if (err) throw err;
 			res.render(template, {event_data:events}, function(err, content) {
 				res.send(content);

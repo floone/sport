@@ -90,7 +90,7 @@
 		var staticJsonString = document.getElementById('json_event_data').innerHTML;
 		if (staticJsonString === '{"event_data":"[]"}') {
 			console.log('Found template string, calling server...')
-			get('/events/1/1',
+			get('/events',
 				function(jsonStr) {
 					cb(null, jsonStr);
 				},
