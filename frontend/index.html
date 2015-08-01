@@ -41,6 +41,11 @@
 					<time datetime="{{=value.created_at}}">{{=value.created_at}}</time>
 				</div>
 				<div class="posttext">{{=value.text}}</div>
+				{{? value.media_url }}
+					<a href="{{=value.media_url}}">
+						<img class="postimage" src="{{=value.media_url}}" />
+					</a>
+				{{?}}
 			</div>
 		{{~}}
 	</script>
@@ -103,6 +108,7 @@ a.row { display: block; }
 }
 .postimage {
 	margin-top: 12px;
+	max-width: 100%;
 }
 
 /* typography */
@@ -219,6 +225,7 @@ o.toString()+"());"+a;try{return new Function(b.varname,a)}catch(n){typeof conso
 			var parsed = JSON.parse(jsonStr);
 			console.log(jsonStr);
 			content.innerHTML = formatPosts(JSON.parse(jsonStr));
+			prettyTimes();
 		});
 	};
 	
