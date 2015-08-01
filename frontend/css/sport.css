@@ -32,6 +32,29 @@ a.row { display: block; }
 	clear: both;
 }
 
+.post {
+	text-align: left;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #ccc;
+	width: 100%;
+	overflow:hidden;
+}
+.post .postheader, .post .posttext {
+	padding-left: 8px;
+	padding-right: 8px;
+}
+.post .postheader {
+	margin-bottom: 4px;
+}
+.post .username, .post time {
+	font-size: 0.9em;
+	color: #666;
+}
+.postimage {
+	margin-top: 12px;
+}
+
 /* typography */
 .teama, .teamb, .result {
 	font-size: 22px;

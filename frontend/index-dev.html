@@ -33,6 +33,17 @@
 			</a>
 		{{~}}
 	</script>
+	<script id="posttmpl" type="text/x-dot-template">
+		{{~it :value:index}}
+			<div id="post{{=value.id}}" class="post">
+				<div class="postheader">
+					<strong>{{=value.username}}</strong>&nbsp;
+					<time datetime="{{=value.created_at}}">{{=value.created_at}}</time>
+				</div>
+				<div class="posttext">{{=value.text}}</div>
+			</div>
+		{{~}}
+	</script>
 	<link rel="stylesheet" type="text/css" href="css/normalize.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/sport.css" />
 </head>

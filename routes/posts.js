@@ -14,7 +14,7 @@ module.exports = function(ctx) {
 			if (isNaN(sinceId)) ctx.error('sinceId must be numeric', res, []);
 			query.id = orm.gt(sinceId);
 		}
-		postsModel.find(query, MAX_READ, function(err, posts) {
+		postsModel.find(query, MAX_READ, ['created_at', 'Z'], function(err, posts) {
 			if (err) throw err;
 			res.send(posts);
 		});

@@ -56,7 +56,7 @@
 	var MAX_POSTS_ON_PAGE = 250;
 
 	var formatEvents = doT.template(document.getElementById('eventtmpl').text);
-	//var formatPosts = doT.template(document.getElementById('posttmpl').text);
+	var formatPosts = doT.template(document.getElementById('posttmpl').text);
 	var content = document.getElementById('content');
 	var swatch;
 	var lastPostId = 0;
@@ -75,6 +75,7 @@
 		get('/posts/' + eventId + '/since/' + lastPostId, function(jsonStr) {
 			var parsed = JSON.parse(jsonStr);
 			console.log(jsonStr);
+			content.innerHTML = formatPosts(JSON.parse(jsonStr));
 		});
 	};
 	
