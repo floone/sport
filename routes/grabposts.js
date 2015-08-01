@@ -4,8 +4,10 @@ module.exports = function(ctx) {
 		if (ev.refresh_url) {
 			return ev.refresh_url + '&count=100';
 		}
-		var teamhash = '#' + ev.teama + ev.teamb;
-		var query = teamhash;
+		var query = 
+			'#' + ev.teama + ev.teamb + ' OR ' + 
+			'#' + ev.teama + ' OR ' + 
+			'#' + ev.teamb;
 		if (ev.tags) {
 			query += ev.tags;
 		}
