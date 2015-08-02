@@ -142,7 +142,7 @@ h1 a {
 <body>
 	<div class="container">
 		<section class="header">
-			<h1><a href="#">Sport</a></h1>
+			<h1><a href="#" id="headline">Sport</a></h1>
 		</section>
 		<div id="displayAllTrigger" style="display: none">
 			Display all
@@ -204,7 +204,7 @@ o.toString()+"());"+a;try{return new Function(b.varname,a)}catch(n){typeof conso
 			}
 		}
 		// update all <a> tags that have a data-time attribute (events view)
-		var events = document.getElementsByTagName('a');
+		/*var events = document.getElementsByTagName('a');
 		for (var i = 0; i < events.length; i++) {
 			var dtStr = events[i].getAttribute('data-time');
 			if (dtStr) {
@@ -212,7 +212,7 @@ o.toString()+"());"+a;try{return new Function(b.varname,a)}catch(n){typeof conso
 				// TODO accessing the element by index is risky...
 				events[i].children[2].innerHTML = ('0' + dt.getHours()).slice(-2) + ':' + ('0' + dt.getMinutes()).slice(-2);
 			}
-		}
+		}*/
 	}
 
 	var INTERVAL = 20 * 1000;
@@ -231,6 +231,39 @@ o.toString()+"());"+a;try{return new Function(b.varname,a)}catch(n){typeof conso
 		return window.location.hash.replace('#', '');
 	};
 	
+	var addPostsToDOM = function(posts) {
+		var updates = formatPosts(posts);
+		if (content.hasChildNodes()) {
+			content.children[0].insertAdjacentHTML('beforebegin', updates);
+		}
+		else {
+			content.innerHTML = updates;
+		}
+		var i;
+		for (i = content.children.length - 1; i >= MAX_POSTS_ON_PAGE; i--) {
+			content.removeChild(content.children[i]);
+		}
+		prettyTimes();
+	};
+	
+	var showPostsOrTrigger = function(postsLength, showImmediately) {
+		if (showImmediately) {
+			displayAll();
+		}
+		else {
+			numberOfNewTweets = Math.min(numberOfNewTweets + postsLength, MAX_POSTS_ON_PAGE);
+			displayAllTrigger.innerHTML = 'Show ' + numberOfNewTweets + ' new posts...';
+			displayAllTrigger.style.display = '';
+		}
+	};
+	
+	var updateHeadline = function(eventData) {
+		var headline = document.getElementById('headline');
+		headline.innerHTML = typeof eventData == 'object'
+		? '#' + eventData.teama + eventData.teamb
+		: eventData;;
+	};
+	
 	var updatePosts = function(showImmediately) {
 		var eventId = getEventId();
 		if (eventId === '' || isNaN(eventId)) return;
@@ -238,35 +271,16 @@ o.toString()+"());"+a;try{return new Function(b.varname,a)}catch(n){typeof conso
 		
 		var url = '/posts/' + eventId + '/since/' + lastPostId;
 		get(url, function(jsonStr) {
-			var parsed = JSON.parse(jsonStr);
+			var container = JSON.parse(jsonStr);
+			var posts = container.posts;
 			
-			if (parsed.length > 0) {
-				lastPostId = parsed[0].id;
-				var updates = formatPosts(parsed);
-				
-				// insert nodes
-				if (content.hasChildNodes()) {
-					content.children[0].insertAdjacentHTML('beforebegin', updates);
-				}
-				else {
-					content.innerHTML = updates;
-				}
-				
-				// set visibility or show trigger button
-				if (showImmediately) {
-					displayAll();
-				}
-				else {
-					numberOfNewTweets = Math.min(numberOfNewTweets + parsed.length, MAX_POSTS_ON_PAGE);
-					displayAllTrigger.innerHTML = 'Show ' + numberOfNewTweets + ' new posts...';
-					displayAllTrigger.style.display = '';
-				}
-				
-				var i;
-				for (i = content.children.length - 1; i >= MAX_POSTS_ON_PAGE; i--) {
-					content.removeChild(content.children[i]);
-				}
-				prettyTimes();
+			
+			updateHeadline(container.eventData);
+			
+			if (posts.length > 0) {
+				lastPostId = posts[0].id;
+				addPostsToDOM(posts);
+				showPostsOrTrigger(posts.length, showImmediately);
 			}
 			setTimeout(updatePosts, INTERVAL);
 		});
@@ -308,6 +322,7 @@ o.toString()+"());"+a;try{return new Function(b.varname,a)}catch(n){typeof conso
 		lastPostId = 0;
 		if (getEventId() === '') {
 			updateEvents();
+			updateHeadline('Sport');
 		}
 		else {
 			updatePosts(true);
