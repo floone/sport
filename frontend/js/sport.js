@@ -68,6 +68,36 @@
 		return window.location.hash.replace('#', '');
 	};
 	
+	var addPostsToDOM = function(posts) {
+		var updates = formatPosts(posts);
+		if (content.hasChildNodes()) {
+			console.log('prepend');
+			content.children[0].insertAdjacentHTML('beforebegin', updates);
+		}
+		else {
+			console.log('first call');
+			content.innerHTML = updates;
+		}
+		var i;
+		for (i = content.children.length - 1; i >= MAX_POSTS_ON_PAGE; i--) {
+			content.removeChild(content.children[i]);
+		}
+		prettyTimes();
+	}
+	
+	var showPostsOrTrigger = function(postsLength, showImmediately) {
+		if (showImmediately) {
+			console.log('show all');
+			displayAll();
+		}
+		else {
+			console.log('show trigger');
+			numberOfNewTweets = Math.min(numberOfNewTweets + postsLength, MAX_POSTS_ON_PAGE);
+			displayAllTrigger.innerHTML = 'Show ' + numberOfNewTweets + ' new posts...';
+			displayAllTrigger.style.display = '';
+		}
+	}
+	
 	var updatePosts = function(showImmediately) {
 		var eventId = getEventId();
 		if (eventId === '' || isNaN(eventId)) return;
@@ -79,40 +109,13 @@
 		get(url, function(jsonStr) {
 			var container = JSON.parse(jsonStr);
 			var posts = container.posts;
-
+			
 			console.log('got ' + posts.length + ' events');
 			
 			if (posts.length > 0) {
 				lastPostId = posts[0].id;
-				var updates = formatPosts(posts);
-				
-				// insert nodes
-				if (content.hasChildNodes()) {
-					console.log('prepend');
-					content.children[0].insertAdjacentHTML('beforebegin', updates);
-				}
-				else {
-					console.log('first call');
-					content.innerHTML = updates;
-				}
-				
-				// set visibility or show trigger button
-				if (showImmediately) {
-					console.log('show all');
-					displayAll();
-				}
-				else {
-					console.log('show trigger');
-					numberOfNewTweets = Math.min(numberOfNewTweets + posts.length, MAX_POSTS_ON_PAGE);
-					displayAllTrigger.innerHTML = 'Show ' + numberOfNewTweets + ' new posts...';
-					displayAllTrigger.style.display = '';
-				}
-				
-				var i;
-				for (i = content.children.length - 1; i >= MAX_POSTS_ON_PAGE; i--) {
-					content.removeChild(content.children[i]);
-				}
-				prettyTimes();
+				addPostsToDOM(posts);
+				showPostsOrTrigger(posts.length, showImmediately);
 			}
 			setTimeout(updatePosts, INTERVAL);
 		});
