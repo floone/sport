@@ -83,7 +83,7 @@
 			content.removeChild(content.children[i]);
 		}
 		prettyTimes();
-	}
+	};
 	
 	var showPostsOrTrigger = function(postsLength, showImmediately) {
 		if (showImmediately) {
@@ -96,7 +96,14 @@
 			displayAllTrigger.innerHTML = 'Show ' + numberOfNewTweets + ' new posts...';
 			displayAllTrigger.style.display = '';
 		}
-	}
+	};
+	
+	var updateHeadline = function(eventData) {
+		var headline = document.getElementById('headline');
+		headline.innerHTML = typeof eventData == 'object'
+		? '#' + eventData.teama + eventData.teamb
+		: eventData;;
+	};
 	
 	var updatePosts = function(showImmediately) {
 		var eventId = getEventId();
@@ -111,6 +118,8 @@
 			var posts = container.posts;
 			
 			console.log('got ' + posts.length + ' events');
+			
+			updateHeadline(container.eventData);
 			
 			if (posts.length > 0) {
 				lastPostId = posts[0].id;
@@ -159,6 +168,7 @@
 		lastPostId = 0;
 		if (getEventId() === '') {
 			updateEvents();
+			updateHeadline('Sport');
 		}
 		else {
 			updatePosts(true);
