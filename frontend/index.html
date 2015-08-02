@@ -234,14 +234,11 @@ o.toString()+"());"+a;try{return new Function(b.varname,a)}catch(n){typeof conso
 	var updatePosts = function(showImmediately) {
 		var eventId = getEventId();
 		if (eventId === '' || isNaN(eventId)) return;
-		console.log('update posts of event ' + eventId);
 		if (lastPostId === 0) content.innerHTML = '';
 		
 		var url = '/posts/' + eventId + '/since/' + lastPostId;
-		console.log('get ' + url);
 		get(url, function(jsonStr) {
 			var parsed = JSON.parse(jsonStr);
-			console.log('got ' + parsed.length + ' events');
 			
 			if (parsed.length > 0) {
 				lastPostId = parsed[0].id;
@@ -249,21 +246,17 @@ o.toString()+"());"+a;try{return new Function(b.varname,a)}catch(n){typeof conso
 				
 				// insert nodes
 				if (content.hasChildNodes()) {
-					console.log('prepend');
 					content.children[0].insertAdjacentHTML('beforebegin', updates);
 				}
 				else {
-					console.log('first call');
 					content.innerHTML = updates;
 				}
 				
 				// set visibility or show trigger button
 				if (showImmediately) {
-					console.log('show all');
 					displayAll();
 				}
 				else {
-					console.log('show trigger');
 					numberOfNewTweets = Math.min(numberOfNewTweets + parsed.length, MAX_POSTS_ON_PAGE);
 					displayAllTrigger.innerHTML = 'Show ' + numberOfNewTweets + ' new posts...';
 					displayAllTrigger.style.display = '';
@@ -289,7 +282,6 @@ o.toString()+"());"+a;try{return new Function(b.varname,a)}catch(n){typeof conso
 	}
 	
 	var updateEvents = function() {
-		console.log('Will display events');
 		getEventsJson(function(err, jsonStr) {
 			if (err) throw err;
 			content.innerHTML = formatEvents(JSON.parse(jsonStr));
@@ -299,7 +291,6 @@ o.toString()+"());"+a;try{return new Function(b.varname,a)}catch(n){typeof conso
 	var getEventsJson = function(cb) {
 		var staticJsonString = document.getElementById('json_event_data').innerHTML;
 		if (staticJsonString === '{"event_data":"[]"}') {
-			console.log('Found template string, calling server...')
 			get('/events',
 				function(jsonStr) {
 					cb(null, jsonStr);
