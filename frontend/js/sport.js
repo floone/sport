@@ -41,7 +41,7 @@
 			}
 		}
 		// update all <a> tags that have a data-time attribute (events view)
-		var events = document.getElementsByTagName('a');
+		/*var events = document.getElementsByTagName('a');
 		for (var i = 0; i < events.length; i++) {
 			var dtStr = events[i].getAttribute('data-time');
 			if (dtStr) {
@@ -49,7 +49,7 @@
 				// TODO accessing the element by index is risky...
 				events[i].children[2].innerHTML = ('0' + dt.getHours()).slice(-2) + ':' + ('0' + dt.getMinutes()).slice(-2);
 			}
-		}
+		}*/
 	}
 
 	var INTERVAL = 20 * 1000;
@@ -77,12 +77,14 @@
 		var url = '/posts/' + eventId + '/since/' + lastPostId;
 		console.log('get ' + url);
 		get(url, function(jsonStr) {
-			var parsed = JSON.parse(jsonStr);
-			console.log('got ' + parsed.length + ' events');
+			var container = JSON.parse(jsonStr);
+			var posts = container.posts;
+
+			console.log('got ' + posts.length + ' events');
 			
-			if (parsed.length > 0) {
-				lastPostId = parsed[0].id;
-				var updates = formatPosts(parsed);
+			if (posts.length > 0) {
+				lastPostId = posts[0].id;
+				var updates = formatPosts(posts);
 				
 				// insert nodes
 				if (content.hasChildNodes()) {
@@ -101,7 +103,7 @@
 				}
 				else {
 					console.log('show trigger');
-					numberOfNewTweets = Math.min(numberOfNewTweets + parsed.length, MAX_POSTS_ON_PAGE);
+					numberOfNewTweets = Math.min(numberOfNewTweets + posts.length, MAX_POSTS_ON_PAGE);
 					displayAllTrigger.innerHTML = 'Show ' + numberOfNewTweets + ' new posts...';
 					displayAllTrigger.style.display = '';
 				}
