@@ -38,23 +38,23 @@ done
 
 echo "-- Get posts"
 RESP=$(get $BASE_URL/posts/1)
-assertEquals "$RESP" "50" ". | length"
+assertEquals "$RESP" "50" ".posts | length"
 for i in $(seq 1 1 50); do
-    assertEquals "$RESP" "$i" ".[$(( i-1 ))] | .id"
+    assertEquals "$RESP" "$i" ".posts | .[$(( i-1 ))] | .id"
 done
 
 echo "-- Get posts since"
 RESP=$(get $BASE_URL/posts/1/since/20)
-assertEquals "$RESP" "50" ". | length"
+assertEquals "$RESP" "50" ".posts | length"
 for i in $(seq 1 1 50); do
-    assertEquals "$RESP" "$(( i + 20 ))" ".[$(( i-1 ))] | .id"
+    assertEquals "$RESP" "$(( i + 20 ))" ".posts | .[$(( i-1 ))] | .id"
 done
 
 echo "-- Get posts since II"
 RESP=$(get $BASE_URL/posts/1/since/90)
-assertEquals "$RESP" "10" ". | length"
+assertEquals "$RESP" "10" ".posts | length"
 for i in $(seq 1 1 10); do
-    assertEquals "$RESP" "$(( i + 90 ))" ".[$(( i-1 ))] | .id"
+    assertEquals "$RESP" "$(( i + 90 ))" ".posts | .[$(( i-1 ))] | .id"
 done
 
 cd - >/dev/null && . include-after.sh
