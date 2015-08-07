@@ -158,7 +158,7 @@
 			}
 			displayChart();
 			window.addEventListener('resize', displayChart, false);
-			setTimeout(updatePosts, INTERVAL);
+			swatch = setTimeout(updatePosts, INTERVAL);
 		});
 	};
 	
