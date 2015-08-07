@@ -31,7 +31,12 @@ module.exports = function(ctx) {
 					data.datasets[0].data.push(pair.count_id);
 				}
 			});
-			cb(data);
+			if (data.labels.length === 0) {
+				cb(null);
+			}
+			else {
+				cb(data);
+			}
 		});
 	};
 
