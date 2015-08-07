@@ -57,17 +57,30 @@ module.exports = function(ctx) {
 	ctx.app.post("/admin/grab/posts", ctx.auth, function(req, res) {
 		req.models.event.find({}).where('datetime BETWEEN NOW() - INTERVAL 2 HOUR AND NOW() + INTERVAL 4 HOUR').run(function(err, events) {
 			if (err) throw err;
+
+			// Twitter GET search is rate limited to 180 requests per 15 mins => 12 requests per minute
+			// We are called every minute, so we need to ensure that we stay in this boundary.
+			var MAX_EVENTS = 10;
+			if (events.length > MAX_EVENTS) {
+				events.splice(0, events.length - MAX_EVENTS);
+			}
+			var waitmillis = 0;
+			// Try to achieve a stable requests/seconds rate when called every minute
+			var offset = 60000 / (events.length + 1);
+
 			events.forEach(function(ev) {
 				var qs = getQueryString(ev);
-				
-				ctx.twitter.find(qs, function(s) { ctx.debug(s); }, function(data) {
-					var posts = readPosts(data, ev.id);
-					storePosts(req.models.post, posts, qs);
-					ev.refresh_url = data.search_metadata.refresh_url;
-					ev.save(function(err) {
-						if (err) throw err;
+				setTimeout(function() {
+					ctx.twitter.find(qs, function(s) { ctx.debug(s); }, function(data) {
+						var posts = readPosts(data, ev.id);
+						storePosts(req.models.post, posts, qs);
+						ev.refresh_url = data.search_metadata.refresh_url;
+						ev.save(function(err) {
+							if (err) throw err;
+						});
 					});
-				});
+				}, waitmillis);
+				waitmillis += offset;
 			});
 			res.send('Processing ' + events.length + ' events.');
 		});
