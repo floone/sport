@@ -61,12 +61,13 @@ module.exports = function(ctx) {
 			// Twitter GET search is rate limited to 180 requests per 15 mins => 12 requests per minute
 			// We are called every minute, so we need to ensure that we stay in this boundary.
 			var MAX_EVENTS = 10;
+			if (events.length === 0) return;
 			if (events.length > MAX_EVENTS) {
 				events.splice(0, events.length - MAX_EVENTS);
 			}
 			var waitmillis = 0;
 			// Try to achieve a stable requests/seconds rate when called every minute
-			var offset = 60000 / (events.length + 1);
+			var offset = 60000 / (events.length);
 
 			events.forEach(function(ev) {
 				var qs = getQueryString(ev);
