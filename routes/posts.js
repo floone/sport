@@ -4,6 +4,31 @@ module.exports = function(ctx) {
 	
 	var MAX_READ = 50;
 	
+	var getChartData = function(postModel, eventData, cb) {
+		postModel.aggregate(["fetched_at"], { event_id: eventData.id }).count("id").groupBy("fetched_at").get(function (err, stats) {
+			var data = {
+				labels: [],
+			    datasets: [
+					{
+						fillColor: "rgba(151,151,151,0.2)",
+						strokeColor: "rgba(151,151,151,1)",
+						pointColor: "rgba(151,151,151,1)",
+						pointStrokeColor: "rgba(151,151,151,1)",
+						pointHighlightFill: "rgba(151,151,151,1)",
+						pointHighlightStroke: "rgba(151,151,151,1)",
+						data: []
+					}
+				]
+			};
+			stats.forEach(function(pair) {
+				//data.labels.push(pair.fetched_at);
+				data.labels.push('');
+				data.datasets[0].data.push(pair.count_id);
+			});
+			cb(data);
+		});
+	};
+
 	var queryPosts = function(res, postModel, eventModel, eventId, sinceId) {
 		query = {};
 		if (eventId) {
@@ -21,11 +46,14 @@ module.exports = function(ctx) {
 				var container = {};
 				container.posts = posts;
 				container.eventData = eventData;
-				res.send(container);
+				getChartData(postModel, eventData, function(stats) {
+					container.stats = stats;
+					res.send(container);
+				});
 			});
 		});
 	};
-	
+
 	ctx.app.get("/posts", function(req, res) {
 		queryPosts(res, req.models.post, req.models.event, null, null);
 	});

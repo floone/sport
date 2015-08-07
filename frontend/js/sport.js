@@ -98,6 +98,34 @@
 		}
 	};
 	
+	var chartData = null;
+
+	var displayChart = function() {
+		var chart = document.getElementById("chart");
+		if (!chartData) {
+			console.log('chartData is null, not displaying it');
+			chart.style.display = 'none';
+			return;
+		}
+		chart.style.display = '';
+		var ctx = chart.getContext("2d");
+		var width = Math.min(window.innerWidth * 0.9, 900);
+		console.log('Canvas width: ' + width);
+		ctx.canvas.width = width;
+		var chart = new Chart(ctx).Line(chartData,
+			{
+				responsive: true,
+				maintainAspectRatio: true,
+				scaleShowLabels: false,
+				datasetStrokeWidth: 1,
+				pointDotRadius: 0,
+				bezierCurve: true,
+				showTooltips: false,
+				pointDot: false
+			}
+		);
+	};
+
 	var updateHeadline = function(eventData) {
 		var headline = document.getElementById('headline');
 		headline.innerHTML = typeof eventData == 'object'
@@ -118,6 +146,7 @@
 			var posts = container.posts;
 			
 			console.log('got ' + posts.length + ' events');
+			chartData = container.stats;
 			
 			updateHeadline(container.eventData);
 			
@@ -126,6 +155,8 @@
 				addPostsToDOM(posts);
 				showPostsOrTrigger(posts.length, showImmediately);
 			}
+			displayChart();
+			window.addEventListener('resize', displayChart, false);
 			setTimeout(updatePosts, INTERVAL);
 		});
 	};

@@ -112,3 +112,13 @@ To check, use
 
 	SELECT @@global.time_zone, @@session.time_zone;
 	SELECT TIMEDIFF(NOW(),CONVERT_TZ(NOW(),@@session.time_zone,'+00:00'));
+
+### Chart library
+
+We use http://www.chartjs.org/ as a custom build -- line charts only.
+
+	git clone https://github.com/nnnick/Chart.js.git
+	cd Chart.js
+	npm install
+	npm install -g gulp
+	gulp build --types=Line
