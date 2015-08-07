@@ -360,6 +360,7 @@ o.toString()+"());"+a;try{return new Function(b.varname,a)}catch(n){typeof conso
 
 	var onHashChange = function() {
 		clearTimeout(swatch);
+		document.getElementById("chart").style.display = 'none';
 		lastPostId = 0;
 		if (getEventId() === '') {
 			updateEvents();
