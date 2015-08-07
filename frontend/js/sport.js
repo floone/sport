@@ -6,11 +6,11 @@
 				cb(request.responseText);
 			}
 			else {
-				err('got http code ' + request.status);
+				console.log('got http code ' + request.status);
 			}
 		};
 		request.onerror = function() {
-			err('an error occurred when trying ' + url);
+			console.log('an error occurred when trying ' + url);
 		};
 		request.open('GET', url, true);
 		request.send();
