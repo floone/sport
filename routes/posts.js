@@ -20,10 +20,16 @@ module.exports = function(ctx) {
 					}
 				]
 			};
+			var skippedFirst = false;
 			stats.forEach(function(pair) {
-				//data.labels.push(pair.fetched_at);
-				data.labels.push('');
-				data.datasets[0].data.push(pair.count_id);
+				if (!skippedFirst) {
+					skippedFirst = true;
+				}
+				else {
+					//data.labels.push(pair.fetched_at);
+					data.labels.push('');
+					data.datasets[0].data.push(pair.count_id);
+				}
 			});
 			cb(data);
 		});

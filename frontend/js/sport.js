@@ -111,6 +111,7 @@
 		var ctx = chart.getContext("2d");
 		var width = Math.min(window.innerWidth * 0.9, 900);
 		console.log('Canvas width: ' + width);
+		console.log('chartData: ' + JSON.stringify(chartData));
 		ctx.canvas.width = width;
 		var chart = new Chart(ctx).Line(chartData,
 			{
