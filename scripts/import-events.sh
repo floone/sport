@@ -23,20 +23,20 @@ getShortName() {
 	[ "$1" == "Hamburger SV" ]        && echo "HSV" && return
 	[ "$1" == "Bayer Leverkusen" ]    && echo "B04" && return
 	[ "$1" == "TSG Hoffenheim" ]      && echo "HOF" && return
-	[ "$1" == "Darmstadt 98" ]        && echo "?" && return
+	[ "$1" == "Darmstadt 98" ]        && echo "D98" && return
 	[ "$1" == "Hannover 96" ]         && echo "H96" && return
 	[ "$1" == "Borussia Dortmund" ]   && echo "BVB" && return
 	[ "$1" == "B.Mönchengladbach" ]   && echo "BMG" && return
 	[ "$1" == "Augsburg" ]            && echo "FCA" && return
 	[ "$1" == "Hertha BSC Berlin" ]   && echo "BSC" && return
 	[ "$1" == "VfL Wolfsburg" ]       && echo "WOB" && return
-	[ "$1" == "Eintracht Frankfurt" ] && echo "?" && return
+	[ "$1" == "Eintracht Frankfurt" ] && echo "SGE" && return
 	[ "$1" == "Werder Bremen" ]       && echo "BRE" && return
 	[ "$1" == "Schalke 04" ]          && echo "S04" && return
 	[ "$1" == "VfB Stuttgart" ]       && echo "VFB" && return
 	[ "$1" == "1. FC Köln" ]          && echo "KOE" && return
 	[ "$1" == "Mainz 05" ]            && echo "M05" && return
-	[ "$1" == "Ingolstadt" ]          && echo "?" && return
+	[ "$1" == "Ingolstadt" ]          && echo "FCI" && return
 	echo ""
 }
 
