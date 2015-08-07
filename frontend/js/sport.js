@@ -197,6 +197,7 @@
 
 	var onHashChange = function() {
 		clearTimeout(swatch);
+		document.getElementById("chart").style.display = 'none';
 		lastPostId = 0;
 		if (getEventId() === '') {
 			updateEvents();
