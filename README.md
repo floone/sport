@@ -113,6 +113,14 @@ To check, use
 	SELECT @@global.time_zone, @@session.time_zone;
 	SELECT TIMEDIFF(NOW(),CONVERT_TZ(NOW(),@@session.time_zone,'+00:00'));
 
+#### mysqldump
+
+Use the predefined variables to execute:
+
+	mysqldump -h $OPENSHIFT_MYSQL_DB_HOST -P ${OPENSHIFT_MYSQL_DB_PORT:-3306} \
+		-u ${OPENSHIFT_MYSQL_DB_USERNAME:-'admin'} \
+		--password="$OPENSHIFT_MYSQL_DB_PASSWORD" sport
+
 ### Chart library
 
 We use http://www.chartjs.org/ as a custom build -- line charts only.
