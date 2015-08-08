@@ -14,6 +14,7 @@ module.exports = function(ctx) {
 		user: process.env.MYSQL_USERNAME || 'root',
 		password: process.env.MYSQL_PASSWORD || '',
 		charset: 'utf8mb4',
+		timezone: 'utc',
 		query: {
 			pool: true,
 			debug: false
