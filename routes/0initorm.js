@@ -85,8 +85,8 @@ module.exports = function(ctx) {
 				table:       { required: false, type: "object" }
 			});
 			models.event = db.define('event', {
-				teama:       { required: true, type: "text", size: 3 },
-				teamb:       { required: true, type: "text", size: 3 },
+				teama:       { required: true, type: "text", size: 4 },
+				teamb:       { required: true, type: "text", size: 4 },
 				datetime:    { required: true, type: "date", time: true },
 				round:       { required: true, type: "integer" },
 				tags:        { required: false, type: "text" },
