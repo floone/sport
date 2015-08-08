@@ -7,7 +7,7 @@ module.exports = function(ctx) {
 		var d = new Date();
 		d.setHours(d.getHours() - 4);
 		query = { datetime: orm.gt(d) };
-		model.find(query, 6, [ 'datetime', 'A' ], function(err, events) {
+		model.find(query, 10, [ 'datetime', 'A' ], function(err, events) {
 			cb(err, events);
 		});
 	};
